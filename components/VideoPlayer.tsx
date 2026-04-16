@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ExampleVideo } from "../types";
 import { C } from "../constants/colors";
+import { claimPlayback, releasePlayback } from "../utils/videoPlayback";
 
 interface Props {
   video: ExampleVideo;
@@ -15,17 +16,6 @@ function formatSeconds(secs: number): string {
   const m = Math.floor(secs / 60);
   const s = Math.floor(secs % 60);
   return `${m}:${s.toString().padStart(2, "0")}`;
-}
-
-// ── One-at-a-time: only one video plays across all VideoPlayer instances ──────
-let _stopActive: (() => void) | null = null;
-
-function claimPlayback(stopFn: () => void) {
-  if (_stopActive && _stopActive !== stopFn) _stopActive();
-  _stopActive = stopFn;
-}
-function releasePlayback(stopFn: () => void) {
-  if (_stopActive === stopFn) _stopActive = null;
 }
 
 export function VideoPlayer({ video }: Props) {

@@ -6,7 +6,7 @@ export interface ExampleVideo {
   id: string;
   thumbnailColor: string; // fallback color shown before playback starts
   url: string; // original social media post reference (not played in-app)
-  videoUrl: string | number; // local require() asset or remote URL for expo-video playback
+  videoUrl: string | number; // local require() asset — used by VideoPlayer
 }
 
 export interface Campaign {
