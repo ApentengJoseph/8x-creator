@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { VideoView, useVideoPlayer } from "expo-video";
+import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { ExampleVideo } from "../types";
 import { C } from "../constants/colors";
@@ -16,41 +17,53 @@ function formatSeconds(secs: number): string {
 }
 
 export function VideoPlayer({ video }: Props) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isReady, setIsReady]       = useState(false);
+  const [isPlaying, setIsPlaying]   = useState(false);
   const [realDuration, setRealDuration] = useState<string | null>(null);
 
   const player = useVideoPlayer(video.videoUrl, (p) => {
-    p.loop = true;
-    p.muted = true; // visual examples only — muting eliminates audio crackle
+    p.loop  = true;
+    p.muted = true; // visual examples — muting eliminates audio crackle
   });
 
-  // Read actual duration once the player has loaded the asset metadata
+  // Once the asset is loaded, seek to 1 s so the VideoView shows a real
+  // frame as a thumbnail rather than a black/empty surface.
   useEffect(() => {
     const sub = player.addListener("statusChange", ({ status }: { status: string }) => {
-      if (status === "readyToPlay" && player.duration > 0 && isFinite(player.duration)) {
-        setRealDuration(formatSeconds(player.duration));
+      if (status === "readyToPlay") {
+        try { player.currentTime = 1; } catch {}
+        setIsReady(true);
+        if (player.duration > 0 && isFinite(player.duration)) {
+          setRealDuration(formatSeconds(player.duration));
+        }
       }
     });
     return () => sub.remove();
   }, [player]);
 
-  // Pause + reset on unmount to prevent white-screen flash during back navigation
+  // Pause on unmount to prevent white-screen flash during back navigation.
+  // Wrapped in try/catch because expo-video may release the native player
+  // before this effect cleanup runs, causing an "already released" error.
   useEffect(() => {
     return () => {
-      player.pause();
-      player.currentTime = 0;
+      try {
+        player.pause();
+        player.currentTime = 0;
+      } catch {}
     };
   }, []);
 
   const handlePlay = useCallback(() => {
-    setIsPlaying(true);
+    try { player.currentTime = 0; } catch {}
     player.play();
+    setIsPlaying(true);
   }, [player]);
 
   const handleStop = useCallback(() => {
     player.pause();
-    player.currentTime = 0;
     setIsPlaying(false);
+    // Seek back to poster frame
+    try { player.currentTime = 1; } catch {}
   }, [player]);
 
   return (
@@ -63,7 +76,7 @@ export function VideoPlayer({ video }: Props) {
       backgroundColor: video.thumbnailColor,
       ...C.shadow,
     }}>
-      {/* VideoView always mounted — unmounting while playing causes surface destruction */}
+      {/* Always-mounted VideoView — holds the thumbnail frame when paused */}
       <VideoView
         player={player}
         style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%" }}
@@ -72,46 +85,61 @@ export function VideoPlayer({ video }: Props) {
         surfaceType="textureView"
       />
 
-      {/* ── Poster (shown before play) ── */}
+      {/* Solid colour cover: only shown while the asset hasn't loaded yet.
+          Once isReady, the real video frame shows through. */}
+      {!isReady && (
+        <View style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: video.thumbnailColor,
+        }} />
+      )}
+
+      {/* ── Poster overlay (tap-to-play state) ── */}
       {!isPlaying && (
         <TouchableOpacity
           onPress={handlePlay}
           style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
           activeOpacity={0.88}
         >
-          {/* Brand-color base */}
-          <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: video.thumbnailColor }} />
-          {/* Dark tint */}
-          <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.32)" }} />
+          {/* Gradient scrim so the play button is readable over any frame */}
+          <LinearGradient
+            colors={["rgba(0,0,0,0.08)", "rgba(0,0,0,0.52)"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+          />
 
-          {/* Duration — real value once loaded, blank until then */}
+          {/* Duration badge — shown once metadata is parsed */}
           {realDuration != null && (
             <View style={{
               position: "absolute", top: 10, right: 10,
-              backgroundColor: "rgba(0,0,0,0.55)",
+              backgroundColor: "rgba(0,0,0,0.6)",
               borderRadius: 6, paddingHorizontal: 6, paddingVertical: 3,
             }}>
-              <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 9, fontWeight: "600" }}>
+              <Text style={{ color: "#fff", fontSize: 9, fontWeight: "600" }}>
                 {realDuration}
               </Text>
             </View>
           )}
 
           {/* Play button */}
-          <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, alignItems: "center", justifyContent: "center" }}>
+          <View style={{
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+            alignItems: "center", justifyContent: "center",
+          }}>
             <View style={{
-              width: 44, height: 44, borderRadius: 22,
-              backgroundColor: "rgba(255,255,255,0.2)",
+              width: 46, height: 46, borderRadius: 23,
+              backgroundColor: "rgba(255,255,255,0.22)",
               alignItems: "center", justifyContent: "center",
-              borderWidth: 1.5, borderColor: "rgba(255,255,255,0.6)",
+              borderWidth: 1.5, borderColor: "rgba(255,255,255,0.7)",
             }}>
-              <Ionicons name="play" size={17} color="#fff" style={{ marginLeft: 2 }} />
+              <Ionicons name="play" size={18} color="#fff" style={{ marginLeft: 2 }} />
             </View>
           </View>
         </TouchableOpacity>
       )}
 
-      {/* ── Playback controls (shown while playing) ── */}
+      {/* ── Playing controls ── */}
       {isPlaying && (
         <>
           <TouchableOpacity
@@ -121,7 +149,7 @@ export function VideoPlayer({ video }: Props) {
               width: 30, height: 30, borderRadius: 15,
               backgroundColor: "rgba(0,0,0,0.6)",
               alignItems: "center", justifyContent: "center",
-              borderWidth: 1, borderColor: "rgba(255,255,255,0.2)",
+              borderWidth: 1, borderColor: "rgba(255,255,255,0.25)",
             }}
             activeOpacity={0.8}
           >
