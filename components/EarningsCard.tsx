@@ -108,14 +108,14 @@ export function EarningsCard() {
           <View style={{
             marginTop: 12, paddingTop: 12,
             borderTopWidth: 1, borderTopColor: C.greenBorder,
-            flexDirection: "row", alignItems: "center", gap: 8,
+            flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 6,
           }}>
             <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: C.amber }} />
-            <Text style={{ color: C.textMid, fontSize: 13, flex: 1 }}>
-              <Text style={{ fontWeight: "700", color: C.amber }}>
-                ${pendingValue.toLocaleString("en-US")} pending
-              </Text>
-              {" "}· {pendingCount} {pendingCount === 1 ? "review" : "reviews"} in progress
+            <Text style={{ fontWeight: "700", color: C.amber, fontSize: 13 }}>
+              {`$${pendingValue.toLocaleString("en-US")} pending`}
+            </Text>
+            <Text style={{ color: C.textMid, fontSize: 13 }}>
+              {`· ${pendingCount} ${pendingCount === 1 ? "review" : "reviews"} in progress`}
             </Text>
           </View>
         )}
