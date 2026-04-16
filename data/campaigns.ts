@@ -1,19 +1,17 @@
 import { Campaign } from "../types";
 
-// Public MP4s from Google's sample video CDN — always accessible, no auth required
+// Apple's publicly documented HLS test streams — no auth, global CDN, no permission issues.
+// These are the same streams Apple uses in its WWDC / developer documentation.
+// In production these would be replaced with a real UGC video CDN (Mux, Cloudflare Stream, etc.).
 const VIDEOS = {
-  blazes: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-  escapes: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-  joyrides: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-  meltdowns: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-  subaru: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
-  car: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
-  volkswagen: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
-  tearsofsteel: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-  elephant: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-  bunny: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  weddingPresent: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeddingPresent.mp4",
-  forBiggerFun: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+  // 4×3 adaptive bitrate stream (~30 s loop) — works as a short workout clip stand-in
+  bipbop4x3:  "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8",
+  // Advanced fMP4 stream — slightly different visual for visual variety
+  bipbopAdv:  "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+  // 16×9 variant — portrait-friendly test stream
+  bipbop16x9: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8",
+  // HEVC + SDR stream (iOS 14+) — different encoding path
+  hevcSdr:    "https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8",
 };
 
 export const CAMPAIGNS: Campaign[] = [
@@ -45,7 +43,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "2.4M",
         creator: "@fitwithmaya",
         url: "https://www.instagram.com/reel/DWy1p6vN-7V/",
-        videoUrl: VIDEOS.blazes,
+        videoUrl: VIDEOS.bipbop4x3,
       },
       {
         id: "ex-001-b",
@@ -54,7 +52,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "890K",
         creator: "@corebykarl",
         url: "https://www.tiktok.com/@corebykarl/video/7312891234567890123",
-        videoUrl: VIDEOS.escapes,
+        videoUrl: VIDEOS.bipbopAdv,
       },
     ],
     spotsTotal: 50,
@@ -89,7 +87,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "1.1M",
         creator: "@danieltrains",
         url: "https://www.tiktok.com/@danieltrains/video/7289456123789012345",
-        videoUrl: VIDEOS.joyrides,
+        videoUrl: VIDEOS.bipbop16x9,
       },
       {
         id: "ex-002-b",
@@ -98,7 +96,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "450K",
         creator: "@sarahlifts",
         url: "https://www.instagram.com/reel/C2xG8KyN4Qp/",
-        videoUrl: VIDEOS.meltdowns,
+        videoUrl: VIDEOS.hevcSdr,
       },
     ],
     spotsTotal: 80,
@@ -133,7 +131,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "3.2M",
         creator: "@sleepwithsam",
         url: "https://www.instagram.com/reel/C8XmPqRT9Yz/",
-        videoUrl: VIDEOS.subaru,
+        videoUrl: VIDEOS.bipbop4x3,
       },
       {
         id: "ex-003-b",
@@ -142,7 +140,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "1.8M",
         creator: "@biohackjess",
         url: "https://www.instagram.com/reel/C9AbKLmN3Wv/",
-        videoUrl: VIDEOS.car,
+        videoUrl: VIDEOS.bipbopAdv,
       },
     ],
     spotsTotal: 30,
@@ -177,7 +175,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "920K",
         creator: "@noramoves",
         url: "https://www.instagram.com/reel/C7RsPqMN2Xk/",
-        videoUrl: VIDEOS.volkswagen,
+        videoUrl: VIDEOS.bipbop16x9,
       },
       {
         id: "ex-004-b",
@@ -186,7 +184,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "640K",
         creator: "@pilateswithpri",
         url: "https://www.instagram.com/reel/C6YnKjLP8Qm/",
-        videoUrl: VIDEOS.tearsofsteel,
+        videoUrl: VIDEOS.hevcSdr,
       },
     ],
     spotsTotal: 40,
@@ -221,7 +219,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "750K",
         creator: "@tomgrooming",
         url: "https://www.tiktok.com/@tomgrooming/video/7301234567890123456",
-        videoUrl: VIDEOS.elephant,
+        videoUrl: VIDEOS.bipbop4x3,
       },
       {
         id: "ex-005-b",
@@ -230,7 +228,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "310K",
         creator: "@plainskindiary",
         url: "https://www.tiktok.com/@plainskindiary/video/7315678901234567890",
-        videoUrl: VIDEOS.forBiggerFun,
+        videoUrl: VIDEOS.bipbopAdv,
       },
     ],
     spotsTotal: 60,
@@ -265,7 +263,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "1.5M",
         creator: "@alexmornings",
         url: "https://www.tiktok.com/@alexmornings/video/7287654321098765432",
-        videoUrl: VIDEOS.weddingPresent,
+        videoUrl: VIDEOS.bipbop16x9,
       },
       {
         id: "ex-006-b",
@@ -274,7 +272,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "980K",
         creator: "@wellnesswithliv",
         url: "https://www.tiktok.com/@wellnesswithliv/video/7299012345678901234",
-        videoUrl: VIDEOS.bunny,
+        videoUrl: VIDEOS.hevcSdr,
       },
     ],
     spotsTotal: 35,

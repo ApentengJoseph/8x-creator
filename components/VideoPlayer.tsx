@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,10 +15,18 @@ export function VideoPlayer({ video }: Props) {
 
   const isTikTok = video.url.includes("tiktok.com");
 
-  // Pass URI string directly — expo-video v2 parseSource handles string → { uri }
   const player = useVideoPlayer(video.videoUrl, (p) => {
     p.loop = true;
   });
+
+  // Pause + reset when the component unmounts (e.g. navigating back from campaign detail).
+  // Without this, a playing TextureView surface gets destroyed mid-frame → white screen flash.
+  useEffect(() => {
+    return () => {
+      player.pause();
+      player.currentTime = 0;
+    };
+  }, []);
 
   const handlePlay = useCallback(() => {
     setIsPlaying(true);
