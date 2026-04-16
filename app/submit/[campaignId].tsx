@@ -54,8 +54,10 @@ export default function SubmitScreen() {
   const parsed = isUrlValid ? parseVideoUrl(url) : null;
   const canSubmit = isUrlValid && confirmed;
 
+  // Default to the campaign's preferred platform; user can always switch
   useEffect(() => {
     if (campaign?.platform === "instagram") setSelectedPlatform("instagram");
+    else setSelectedPlatform("tiktok");
   }, [campaign]);
 
   const handleSubmit = async () => {
@@ -191,39 +193,52 @@ export default function SubmitScreen() {
             </View>
           </View>
 
-          {/* Platform toggle */}
-          {campaign.platform === "both" && (
-            <View style={{ marginBottom: 24 }}>
-              <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 0.8, marginBottom: 10 }}>
+          {/* Platform toggle — always visible so creators can choose */}
+          <View style={{ marginBottom: 24 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+              <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 0.8 }}>
                 PLATFORM
               </Text>
-              <View style={{ flexDirection: "row", gap: 10 }}>
-                {(["tiktok", "instagram"] as SubmitPlatform[]).map((p) => {
-                  const cfg = PLATFORM_CONFIG[p];
-                  const active = selectedPlatform === p;
-                  return (
-                    <TouchableOpacity
-                      key={p}
-                      onPress={() => { Haptics.selectionAsync(); setSelectedPlatform(p); setUrl(""); setUrlTouched(false); }}
-                      style={{
-                        flex: 1, flexDirection: "row", alignItems: "center",
-                        justifyContent: "center", gap: 7, paddingVertical: 11,
-                        borderRadius: 12, borderWidth: 1.5,
-                        backgroundColor: active ? cfg.activeBg : C.card,
-                        borderColor: active ? cfg.activeBorder : C.border,
-                        ...C.shadow,
-                      }}
-                    >
-                      <Ionicons name={cfg.icon} size={15} color={active ? cfg.color : C.textDim} />
+              {campaign.platform !== "both" && (
+                <Text style={{ color: C.textDim, fontSize: 11 }}>
+                  Campaign prefers {campaign.platform === "tiktok" ? "TikTok" : "Instagram"}
+                </Text>
+              )}
+            </View>
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              {(["tiktok", "instagram"] as SubmitPlatform[]).map((p) => {
+                const cfg = PLATFORM_CONFIG[p];
+                const active = selectedPlatform === p;
+                const preferred = campaign.platform === p || campaign.platform === "both";
+                return (
+                  <TouchableOpacity
+                    key={p}
+                    onPress={() => { Haptics.selectionAsync(); setSelectedPlatform(p); setUrl(""); setUrlTouched(false); }}
+                    style={{
+                      flex: 1, flexDirection: "row", alignItems: "center",
+                      justifyContent: "center", gap: 7, paddingVertical: 12,
+                      borderRadius: 12, borderWidth: 1.5,
+                      backgroundColor: active ? cfg.activeBg : C.card,
+                      borderColor: active ? cfg.activeBorder : C.border,
+                      ...C.shadow,
+                    }}
+                  >
+                    <Ionicons name={cfg.icon} size={15} color={active ? cfg.color : C.textDim} />
+                    <View>
                       <Text style={{ color: active ? cfg.color : C.textMid, fontSize: 13, fontWeight: "600" }}>
                         {cfg.label}
                       </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+                      {preferred && campaign.platform !== "both" && (
+                        <Text style={{ color: active ? cfg.color : C.textDim, fontSize: 9, fontWeight: "600", opacity: 0.8 }}>
+                          preferred
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
-          )}
+          </View>
 
           {/* URL input */}
           <View style={{ marginBottom: 16 }}>

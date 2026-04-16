@@ -56,6 +56,7 @@ export function VideoPlayer({ video }: Props) {
         style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%" }}
         contentFit="cover"
         nativeControls={false}
+        surfaceType="textureView"
         onFirstFrameRender={() => setIsBuffering(false)}
       />
 
