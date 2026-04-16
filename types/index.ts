@@ -4,12 +4,9 @@ export type SubmissionStatus = 'pending' | 'approved' | 'rejected';
 
 export interface ExampleVideo {
   id: string;
-  thumbnailColor: string; // fallback color while thumbnail loads
-  duration: string; // e.g. "0:28"
-  views: string; // e.g. "1.2M"
-  creator: string;
-  url: string; // TikTok or Instagram share URL
-  videoUrl: string | number; // direct MP4 URL or local require() asset for expo-video playback
+  thumbnailColor: string; // fallback color shown before playback starts
+  url: string; // original social media post reference (not played in-app)
+  videoUrl: string | number; // local require() asset or remote URL for expo-video playback
 }
 
 export interface Campaign {

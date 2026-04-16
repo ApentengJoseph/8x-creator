@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { Ionicons } from "@expo/vector-icons";
 import { ExampleVideo } from "../types";
@@ -9,18 +9,32 @@ interface Props {
   video: ExampleVideo;
 }
 
+function formatSeconds(secs: number): string {
+  const m = Math.floor(secs / 60);
+  const s = Math.floor(secs % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
 export function VideoPlayer({ video }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isBuffering, setIsBuffering] = useState(false);
-
-  const isTikTok = video.url.includes("tiktok.com");
+  const [realDuration, setRealDuration] = useState<string | null>(null);
 
   const player = useVideoPlayer(video.videoUrl, (p) => {
     p.loop = true;
+    p.muted = true; // visual examples only — muting eliminates audio crackle
   });
 
-  // Pause + reset when the component unmounts (e.g. navigating back from campaign detail).
-  // Without this, a playing TextureView surface gets destroyed mid-frame → white screen flash.
+  // Read actual duration once the player has loaded the asset metadata
+  useEffect(() => {
+    const sub = player.addListener("statusChange", ({ status }: { status: string }) => {
+      if (status === "readyToPlay" && player.duration > 0 && isFinite(player.duration)) {
+        setRealDuration(formatSeconds(player.duration));
+      }
+    });
+    return () => sub.remove();
+  }, [player]);
+
+  // Pause + reset on unmount to prevent white-screen flash during back navigation
   useEffect(() => {
     return () => {
       player.pause();
@@ -30,7 +44,6 @@ export function VideoPlayer({ video }: Props) {
 
   const handlePlay = useCallback(() => {
     setIsPlaying(true);
-    setIsBuffering(true);
     player.play();
   }, [player]);
 
@@ -38,95 +51,51 @@ export function VideoPlayer({ video }: Props) {
     player.pause();
     player.currentTime = 0;
     setIsPlaying(false);
-    setIsBuffering(false);
   }, [player]);
 
   return (
-    <View
-      style={{
-        width: 140,
-        aspectRatio: 9 / 16,
-        borderRadius: 16,
-        overflow: "hidden",
-        marginRight: 12,
-        backgroundColor: video.thumbnailColor,
-        ...C.shadow,
-      }}
-    >
-      {/*
-       * VideoView is ALWAYS mounted here.
-       * Conditional mounting was the bug: player.play() fired before the view
-       * existed, so the player had no rendering surface and showed nothing.
-       * Now the poster is just an overlay on top of the always-present view.
-       */}
+    <View style={{
+      width: 140,
+      aspectRatio: 9 / 16,
+      borderRadius: 16,
+      overflow: "hidden",
+      marginRight: 12,
+      backgroundColor: video.thumbnailColor,
+      ...C.shadow,
+    }}>
+      {/* VideoView always mounted — unmounting while playing causes surface destruction */}
       <VideoView
         player={player}
         style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%" }}
         contentFit="cover"
         nativeControls={false}
         surfaceType="textureView"
-        onFirstFrameRender={() => setIsBuffering(false)}
       />
 
-      {/* ── Poster overlay (visible when not playing) ── */}
+      {/* ── Poster (shown before play) ── */}
       {!isPlaying && (
         <TouchableOpacity
           onPress={handlePlay}
           style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
           activeOpacity={0.88}
         >
-          {/* Solid brand-color background covers the empty video surface */}
+          {/* Brand-color base */}
           <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: video.thumbnailColor }} />
-          {/* Dark tint for legibility */}
-          <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.28)" }} />
+          {/* Dark tint */}
+          <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.32)" }} />
 
-          {/* Subtle dot texture */}
-          {([
-            [14, undefined, 12, undefined],
-            [24, undefined, undefined, 16],
-            [44, undefined, 18, undefined],
-            [58, undefined, undefined, 12],
-            [72, undefined, 10, undefined],
-            [36, undefined, undefined, 28],
-          ] as [number, undefined, number | undefined, number | undefined][]).map(([top, , left, right], i) => (
-            <View key={i} style={{
-              position: "absolute",
-              top: `${top}%` as any,
-              ...(left !== undefined ? { left: `${left}%` } : {}),
-              ...(right !== undefined ? { right: `${right}%` } : {}),
-              width: 3, height: 3, borderRadius: 2,
-              backgroundColor: "rgba(255,255,255,0.18)",
-            }} />
-          ))}
-
-          {/* Platform badge */}
-          <View style={{
-            position: "absolute", top: 10, left: 10,
-            flexDirection: "row", alignItems: "center", gap: 4,
-            backgroundColor: "rgba(0,0,0,0.55)",
-            borderRadius: 8, paddingHorizontal: 7, paddingVertical: 4,
-            borderWidth: 1, borderColor: "rgba(255,255,255,0.12)",
-          }}>
-            <Ionicons
-              name={isTikTok ? "musical-notes" : "logo-instagram"}
-              size={9}
-              color={isTikTok ? "#fff" : "#e1306c"}
-            />
-            <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 9, fontWeight: "700" }}>
-              {isTikTok ? "TikTok" : "Reels"}
-            </Text>
-          </View>
-
-          {/* Duration badge */}
-          <View style={{
-            position: "absolute", top: 10, right: 10,
-            backgroundColor: "rgba(0,0,0,0.55)",
-            borderRadius: 6, paddingHorizontal: 6, paddingVertical: 3,
-          }}>
-            <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 9, fontWeight: "600" }}>
-              {video.duration}
-            </Text>
-          </View>
+          {/* Duration — real value once loaded, blank until then */}
+          {realDuration != null && (
+            <View style={{
+              position: "absolute", top: 10, right: 10,
+              backgroundColor: "rgba(0,0,0,0.55)",
+              borderRadius: 6, paddingHorizontal: 6, paddingVertical: 3,
+            }}>
+              <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 9, fontWeight: "600" }}>
+                {realDuration}
+              </Text>
+            </View>
+          )}
 
           {/* Play button */}
           <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, alignItems: "center", justifyContent: "center" }}>
@@ -139,39 +108,12 @@ export function VideoPlayer({ video }: Props) {
               <Ionicons name="play" size={17} color="#fff" style={{ marginLeft: 2 }} />
             </View>
           </View>
-
-          {/* Creator strip */}
-          <View style={{
-            position: "absolute", bottom: 0, left: 0, right: 0,
-            paddingHorizontal: 10, paddingVertical: 9,
-            backgroundColor: "rgba(0,0,0,0.52)",
-          }}>
-            <Text style={{ color: "#fff", fontSize: 11, fontWeight: "700", marginBottom: 2 }}>
-              {video.creator}
-            </Text>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-              <Ionicons name="eye-outline" size={9} color="rgba(255,255,255,0.55)" />
-              <Text style={{ color: "rgba(255,255,255,0.55)", fontSize: 9 }}>
-                {video.views}
-              </Text>
-            </View>
-          </View>
         </TouchableOpacity>
       )}
 
-      {/* ── Playback controls (visible when playing) ── */}
+      {/* ── Playback controls (shown while playing) ── */}
       {isPlaying && (
         <>
-          {isBuffering && (
-            <View style={{
-              position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-              alignItems: "center", justifyContent: "center",
-              backgroundColor: "rgba(0,0,0,0.3)",
-            }}>
-              <ActivityIndicator color="#fff" />
-            </View>
-          )}
-
           <TouchableOpacity
             onPress={handleStop}
             style={{
