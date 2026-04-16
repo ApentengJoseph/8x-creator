@@ -98,7 +98,10 @@ export function VideoPlayer({ video }: Props) {
 
   const handleCloseExpanded = useCallback(() => {
     setExpanded(false);
-  }, []);
+    // Stop playback and return to thumbnail when modal is dismissed
+    stopFn();
+    releasePlayback(stopFn);
+  }, [stopFn]);
 
   return (
     <>
