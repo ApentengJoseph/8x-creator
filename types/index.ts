@@ -9,7 +9,7 @@ export interface ExampleVideo {
   views: string; // e.g. "1.2M"
   creator: string;
   url: string; // TikTok or Instagram share URL
-  videoUrl: string; // direct MP4 URL for expo-video playback
+  videoUrl: string | number; // direct MP4 URL or local require() asset for expo-video playback
 }
 
 export interface Campaign {

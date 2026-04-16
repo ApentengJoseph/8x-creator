@@ -1,17 +1,19 @@
 import { Campaign } from "../types";
 
-// Apple's publicly documented HLS test streams — no auth, global CDN, no permission issues.
-// These are the same streams Apple uses in its WWDC / developer documentation.
+// Local video assets — bundled with the app, no network required, no auth issues.
 // In production these would be replaced with a real UGC video CDN (Mux, Cloudflare Stream, etc.).
 const VIDEOS = {
-  // 4×3 adaptive bitrate stream (~30 s loop) — works as a short workout clip stand-in
-  bipbop4x3:  "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8",
-  // Advanced fMP4 stream — slightly different visual for visual variety
-  bipbopAdv:  "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
-  // 16×9 variant — portrait-friendly test stream
-  bipbop16x9: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8",
-  // HEVC + SDR stream (iOS 14+) — different encoding path
-  hevcSdr:    "https://devstreaming-cdn.apple.com/videos/streaming/examples/adv_dv_atmos/main.m3u8",
+  v1:  require("../assets/videos/11920773_1080_1920_30fps.mp4"),
+  v2:  require("../assets/videos/12293383_3840_2160_30fps.mp4"),
+  v3:  require("../assets/videos/13512384_1080_1920_25fps.mp4"),
+  v4:  require("../assets/videos/13882058_3840_2160_24fps.mp4"),
+  v5:  require("../assets/videos/14824683_2160_3840_30fps.mp4"),
+  v6:  require("../assets/videos/16929615-uhd_1296_2304_60fps.mp4"),
+  v7:  require("../assets/videos/4828282-uhd_2160_4096_25fps.mp4"),
+  v8:  require("../assets/videos/4828297-uhd_2160_4096_25fps.mp4"),
+  v9:  require("../assets/videos/4830314-uhd_2160_4096_25fps.mp4"),
+  v10: require("../assets/videos/9300025-uhd_2160_4096_25fps.mp4"),
+  v11: require("../assets/videos/9592751-hd_1920_1080_30fps.mp4"),
 };
 
 export const CAMPAIGNS: Campaign[] = [
@@ -43,7 +45,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "2.4M",
         creator: "@fitwithmaya",
         url: "https://www.instagram.com/reel/DWy1p6vN-7V/",
-        videoUrl: VIDEOS.bipbop4x3,
+        videoUrl: VIDEOS.v1,
       },
       {
         id: "ex-001-b",
@@ -52,7 +54,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "890K",
         creator: "@corebykarl",
         url: "https://www.tiktok.com/@corebykarl/video/7312891234567890123",
-        videoUrl: VIDEOS.bipbopAdv,
+        videoUrl: VIDEOS.v2,
       },
     ],
     spotsTotal: 50,
@@ -87,7 +89,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "1.1M",
         creator: "@danieltrains",
         url: "https://www.tiktok.com/@danieltrains/video/7289456123789012345",
-        videoUrl: VIDEOS.bipbop16x9,
+        videoUrl: VIDEOS.v3,
       },
       {
         id: "ex-002-b",
@@ -96,7 +98,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "450K",
         creator: "@sarahlifts",
         url: "https://www.instagram.com/reel/C2xG8KyN4Qp/",
-        videoUrl: VIDEOS.hevcSdr,
+        videoUrl: VIDEOS.v4,
       },
     ],
     spotsTotal: 80,
@@ -131,7 +133,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "3.2M",
         creator: "@sleepwithsam",
         url: "https://www.instagram.com/reel/C8XmPqRT9Yz/",
-        videoUrl: VIDEOS.bipbop4x3,
+        videoUrl: VIDEOS.v5,
       },
       {
         id: "ex-003-b",
@@ -140,7 +142,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "1.8M",
         creator: "@biohackjess",
         url: "https://www.instagram.com/reel/C9AbKLmN3Wv/",
-        videoUrl: VIDEOS.bipbopAdv,
+        videoUrl: VIDEOS.v6,
       },
     ],
     spotsTotal: 30,
@@ -175,7 +177,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "920K",
         creator: "@noramoves",
         url: "https://www.instagram.com/reel/C7RsPqMN2Xk/",
-        videoUrl: VIDEOS.bipbop16x9,
+        videoUrl: VIDEOS.v7,
       },
       {
         id: "ex-004-b",
@@ -184,7 +186,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "640K",
         creator: "@pilateswithpri",
         url: "https://www.instagram.com/reel/C6YnKjLP8Qm/",
-        videoUrl: VIDEOS.hevcSdr,
+        videoUrl: VIDEOS.v8,
       },
     ],
     spotsTotal: 40,
@@ -219,7 +221,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "750K",
         creator: "@tomgrooming",
         url: "https://www.tiktok.com/@tomgrooming/video/7301234567890123456",
-        videoUrl: VIDEOS.bipbop4x3,
+        videoUrl: VIDEOS.v9,
       },
       {
         id: "ex-005-b",
@@ -228,7 +230,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "310K",
         creator: "@plainskindiary",
         url: "https://www.tiktok.com/@plainskindiary/video/7315678901234567890",
-        videoUrl: VIDEOS.bipbopAdv,
+        videoUrl: VIDEOS.v10,
       },
     ],
     spotsTotal: 60,
@@ -263,7 +265,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "1.5M",
         creator: "@alexmornings",
         url: "https://www.tiktok.com/@alexmornings/video/7287654321098765432",
-        videoUrl: VIDEOS.bipbop16x9,
+        videoUrl: VIDEOS.v11,
       },
       {
         id: "ex-006-b",
@@ -272,7 +274,7 @@ export const CAMPAIGNS: Campaign[] = [
         views: "980K",
         creator: "@wellnesswithliv",
         url: "https://www.tiktok.com/@wellnesswithliv/video/7299012345678901234",
-        videoUrl: VIDEOS.hevcSdr,
+        videoUrl: VIDEOS.v1,
       },
     ],
     spotsTotal: 35,
