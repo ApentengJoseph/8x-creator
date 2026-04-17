@@ -7,9 +7,9 @@ Context: Data model done. Building the actual UI. Starting with campaign card si
 
 **Me:** Build me a CampaignCard component. It gets a Campaign object as a prop. Needs: brand avatar (initials), brand name, campaign title, payout (green pill), platform badge, campaign type, time remaining, and either "X accepted" or "Y spots left" based on spotsLeft <= 10.
 
-Dark theme. Think Robinhood meets TikTok creator tools.
+Light, editorial aesthetic — warm off-white base (`#f4f3f1`), brand colour on the avatar, money-green accents. Think Robinhood meets a creator dashboard.
 
-**Claude:** [generates 190-line component with lots of StyleSheet.create at the bottom]
+**Claude:** [generates 190-line component with lots of StyleSheet.create at the bottom and a LinearGradient brand header]
 
 **Me:** Too long. Strip the StyleSheet.create — use inline styles for anything that changes based on props, and the `C.*` design token constants for everything static. Also: I don't need onLongPress, tooltips, or accessibility labels for a demo. Remove that noise.
 

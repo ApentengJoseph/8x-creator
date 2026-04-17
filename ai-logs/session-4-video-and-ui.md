@@ -5,9 +5,9 @@ This session: add real video playback, debug performance issues, redesign the UI
 
 ---
 
-**Me:** Can you use `npx expo install expo-av` to show videos in app and their thumbnails? Extracting the video metadata and reading it. Also improve the UI — make it more sleek with a light version, the dark theme doesn't feel right.
+**Me:** Can you use `npx expo install expo-av` to show videos in app and their thumbnails? Extracting the video metadata and reading it. Also improve the UI — make it more sleek, the gradient card headers feel heavy.
 
-**Claude:** expo-av is deprecated — expo-video v2 is the current API and it's already in the project. I'll wire up the VideoPlayer (already scaffolded) to handle inline playback with expand-to-fullscreen, and switch to a light theme with cream background `#f4f3f1`.
+**Claude:** expo-av is deprecated — expo-video v2 is the current API and it's already in the project. I'll wire up the VideoPlayer (already scaffolded) to handle inline playback with expand-to-fullscreen, and clean up the heavy gradient headers on the cards.
 
 **Me:** Android Bundled 48ms — ERROR Received 3 arguments, but 1 was expected. [VideoPlayer crash]
 
