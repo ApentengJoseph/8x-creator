@@ -10,6 +10,7 @@ import { claimPlayback, releasePlayback } from "../utils/videoPlayback";
 
 interface Props {
   video: ExampleVideo;
+  onPlayStart?: () => void;
 }
 
 function formatSeconds(secs: number): string {
@@ -18,7 +19,7 @@ function formatSeconds(secs: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export function VideoPlayer({ video }: Props) {
+export function VideoPlayer({ video, onPlayStart }: Props) {
   const insets = useSafeAreaInsets();
   const [isReady, setIsReady]           = useState(false);
   const [isPlaying, setIsPlaying]       = useState(false);
@@ -79,7 +80,8 @@ export function VideoPlayer({ video }: Props) {
     try { player.currentTime = 0; } catch {}
     player.play();
     setIsPlaying(true);
-  }, [player, stopFn]);
+    onPlayStart?.();
+  }, [player, stopFn, onPlayStart]);
 
   const handleStop = useCallback(() => {
     stopFn();
@@ -92,9 +94,10 @@ export function VideoPlayer({ video }: Props) {
       try { player.currentTime = 0; } catch {}
       player.play();
       setIsPlaying(true);
+      onPlayStart?.();
     }
     setExpanded(true);
-  }, [isPlaying, player, stopFn]);
+  }, [isPlaying, player, stopFn, onPlayStart]);
 
   const handleCloseExpanded = useCallback(() => {
     setExpanded(false);

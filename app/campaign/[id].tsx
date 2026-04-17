@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -15,6 +15,8 @@ export default function CampaignDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [briefExpanded, setBriefExpanded] = useState(false);
+  const [watchedAny, setWatchedAny] = useState(false);
+  const handleVideoPlay = useCallback(() => setWatchedAny(true), []);
 
   const campaign = CAMPAIGNS.find((c) => c.id === id);
 
@@ -109,7 +111,7 @@ export default function CampaignDetailScreen() {
           <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 1, marginBottom: 10 }}>MUST INCLUDE</Text>
           <View style={{ backgroundColor: C.card, borderRadius: 16, padding: 16, marginBottom: 24, borderWidth: 1, borderColor: C.border, ...C.shadow }}>
             {campaign.requirements.map((req, i) => (
-              <View key={i} style={{ flexDirection: "row", marginBottom: i < campaign.requirements.length - 1 ? 12 : 0 }}>
+              <View key={req} style={{ flexDirection: "row", marginBottom: i < campaign.requirements.length - 1 ? 12 : 0 }}>
                 <View style={{
                   width: 20, height: 20, borderRadius: 10,
                   backgroundColor: C.greenBg, alignItems: "center", justifyContent: "center",
@@ -132,7 +134,7 @@ export default function CampaignDetailScreen() {
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 24 }}>
             {campaign.exampleVideos.map((video) => (
-              <VideoPlayer key={video.id} video={video} />
+              <VideoPlayer key={video.id} video={video} onPlayStart={handleVideoPlay} />
             ))}
           </ScrollView>
 
@@ -158,17 +160,31 @@ export default function CampaignDetailScreen() {
         backgroundColor: "rgba(244,243,241,0.97)",
         borderTopWidth: 1, borderTopColor: C.border,
       }}>
+        {!watchedAny && (
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+            <Ionicons name="play-circle-outline" size={14} color={C.textDim} />
+            <Text style={{ color: C.textDim, fontSize: 12 }}>Watch at least one example video to unlock</Text>
+          </View>
+        )}
         <TouchableOpacity
-          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); router.push(`/submit/${campaign.id}`); }}
-          style={{
-            backgroundColor: C.green, borderRadius: 16, paddingVertical: 17,
-            alignItems: "center", flexDirection: "row", justifyContent: "center", gap: 8,
-            ...C.shadow,
+          onPress={() => {
+            if (!watchedAny) return;
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            router.push(`/submit/${campaign.id}`);
           }}
-          activeOpacity={0.88}
+          style={{
+            backgroundColor: watchedAny ? C.green : C.bgDeep,
+            borderRadius: 16, paddingVertical: 17,
+            alignItems: "center", flexDirection: "row", justifyContent: "center", gap: 8,
+            borderWidth: 1, borderColor: watchedAny ? "transparent" : C.border,
+            ...(watchedAny ? C.shadow : {}),
+          }}
+          activeOpacity={watchedAny ? 0.88 : 1}
         >
-          <Text style={{ color: "#fff", fontSize: 16, fontWeight: "800" }}>Submit your video</Text>
-          <Ionicons name="arrow-forward" size={18} color="#fff" />
+          <Text style={{ color: watchedAny ? "#fff" : C.textDim, fontSize: 16, fontWeight: "800" }}>
+            Submit your video
+          </Text>
+          {watchedAny && <Ionicons name="arrow-forward" size={18} color="#fff" />}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
