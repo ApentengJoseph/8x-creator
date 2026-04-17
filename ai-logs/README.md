@@ -1,6 +1,6 @@
 # AI Logs
 
-How I worked with AI on this build. Three sessions captured here, plus this meta-note.
+How I worked with AI on this build. Five sessions captured here, plus this meta-note.
 
 ## Tools used
 
@@ -29,6 +29,8 @@ AI is a force multiplier, not a ghostwriter. My rough rule:
 - [`session-1-scaffold.md`](./session-1-scaffold.md) — Expo setup, routing structure, first pass at components
 - [`session-2-components.md`](./session-2-components.md) — Campaign card, submission card, URL validator
 - [`session-3-polish.md`](./session-3-polish.md) — Status transitions, animations, edge cases
+- [`session-4-video-and-ui.md`](./session-4-video-and-ui.md) — Real video playback (expo-video), UI redesign, TikTok icon fix
+- [`session-5-testing-and-bestpractices.md`](./session-5-testing-and-bestpractices.md) — 53 unit tests, watch gate, best-practices audit
 
 ## What the logs show (deliberately)
 
