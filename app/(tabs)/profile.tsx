@@ -67,7 +67,7 @@ export default function ProfileScreen() {
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ color: C.text, fontSize: 19, fontWeight: '800', letterSpacing: -0.3, marginBottom: 3 }}>
-                Maya Johnson
+                Theo Johnson
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                 <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: C.green }} />

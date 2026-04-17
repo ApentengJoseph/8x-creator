@@ -50,7 +50,7 @@ export default function DiscoverScreen() {
           {getGreeting()}
         </Text>
         <Text style={{ color: C.text, fontSize: 28, fontWeight: "800", letterSpacing: -0.8, lineHeight: 34 }}>
-          Maya
+          Theo
         </Text>
       </View>
 
