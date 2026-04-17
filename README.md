@@ -98,8 +98,6 @@ ai-logs/                    # Session logs from the build
 
 **Status transitions:** Submissions auto-transition from pending → approved (70%) or rejected (30%) after 30 seconds. This demos the state machine without requiring manual action from the reviewer.
 
-**URL validation:** Platform-specific parsing for TikTok (`/video/`) and Instagram (`/reel/`). Short-links and query-strings are handled. Server-side validation against platform APIs would handle the remaining edge cases in production.
-
 **Earnings counter:** Updates via `Animated.timing` whenever a submission is approved.
 
 **Haptic feedback:** Fires on tab switch, URL validation success, submit, and pull-to-refresh.
