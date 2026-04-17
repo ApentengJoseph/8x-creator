@@ -7,7 +7,7 @@ This session: add real video playback, debug performance issues, redesign the UI
 
 **Me:** Can you use `npx expo install expo-av` to show videos in app and their thumbnails? Extracting the video metadata and reading it. Also improve the UI — make it more sleek with a light version, the dark theme doesn't feel right.
 
-**Claude:** [installs expo-av, builds a VideoPlayer component with useVideoPlayer hook, adds inline playback with expand-to-fullscreen, switches to light theme with cream background `#f4f3f1`]
+**Claude:** expo-av is deprecated — expo-video v2 is the current API and it's already in the project. I'll wire up the VideoPlayer (already scaffolded) to handle inline playback with expand-to-fullscreen, and switch to a light theme with cream background `#f4f3f1`.
 
 **Me:** Android Bundled 48ms — ERROR Received 3 arguments, but 1 was expected. [VideoPlayer crash]
 
@@ -70,5 +70,6 @@ Also, YouTube Shorts via WebView is adding latency. The local compressed videos 
 - `readyToPlay` fires on every loop in expo-video — the fix is a `hasInit` ref, not a status flag, because status can change between loop iterations
 - Ionicons doesn't have a TikTok icon. FontAwesome5 does. Worth knowing before spending time debugging icon names
 - "Too greeny" is a valid design note — the fix was using the border colour rather than a fill, which matched the existing design token
+- expo-av is deprecated; expo-video v2 is the correct API for Expo SDK 54. Worth knowing before installing the wrong package
 - YouTube Shorts via WebView added latency without benefit over compressed local files at 27 MB — not worth the dependency
 - Asking "is it the player or the file size?" was the right diagnostic question — the answer was both, and they had different fixes

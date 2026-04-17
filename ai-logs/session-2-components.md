@@ -11,21 +11,17 @@ Dark theme. Think Robinhood meets TikTok creator tools.
 
 **Claude:** [generates 190-line component with lots of StyleSheet.create at the bottom]
 
-**Me:** Too long, and I said NativeWind. Strip the StyleSheet.create — use inline styles for anything that changes based on props, and Tailwind classes for everything static. Also: I don't need onLongPress, tooltips, or accessibility labels for a demo. Remove that noise.
+**Me:** Too long. Strip the StyleSheet.create — use inline styles for anything that changes based on props, and the `C.*` design token constants for everything static. Also: I don't need onLongPress, tooltips, or accessibility labels for a demo. Remove that noise.
 
-**Claude:** [trims to ~110 lines]
+**Claude:** [trims to ~110 lines, switches to inline styles with C.* constants throughout]
 
-**Me:** Better. One issue — the payout pill uses `className="bg-green-900"` but that won't pick up the brand green I defined. Use inline style with the hex instead of the Tailwind class.
+**Me:** Now the submission card. Three states: pending (amber pill + progress bar), approved (green border, payout shown), rejected (red pill + quoted feedback block + resubmit button). Same aesthetic.
 
-**Claude:** [fixes]
+**Claude:** [generates SubmissionCard with a `STATUS` lookup object — all per-status colour tokens in one place]
 
-**Me:** Now the submission card. Three states: pending (amber pill + progress bar), approved (green border, payout shown), rejected (red pill + quoted feedback block + resubmit button). Same dark aesthetic.
+**Me:** Good call on the STATUS map. I'd have done the same thing. One question — why did you put the accent bar colour in STATUS vs computing it from status? Isn't that redundant with the pill colour?
 
-**Claude:** [generates SubmissionCard with STATUS_CONFIG pattern]
-
-**Me:** Good call on the STATUS_CONFIG map. I'd have done the same thing. One question — why did you put the card border color in STATUS_CONFIG vs computing it from status? Isn't that redundant with the pill color?
-
-**Claude:** [explains tradeoff — could compute from status but STATUS_CONFIG makes all visual states scannable in one place, useful when you need to tweak one status without hunting through the JSX]
+**Claude:** [explains tradeoff — could compute from status but STATUS makes all visual states scannable in one place, useful when you need to tweak one status without hunting through the JSX]
 
 **Me:** Fair. Keeping it.
 
@@ -41,6 +37,6 @@ Now the URL validator. I want a function `validateVideoUrl(url: string, platform
 
 ## Notes to self
 
-- The STATUS_CONFIG pattern (all per-status styling in a lookup object) is cleaner than switch statements in JSX — worth remembering
-- Pushing back on StyleSheet.create: the hybrid approach (Tailwind for static, inline for dynamic) is right for this project size
+- The `STATUS` lookup pattern (all per-status styling in one object) is cleaner than switch statements scattered through JSX — worth remembering
+- The `C.*` design token constants made StyleSheet.create unnecessary — one import, all colours and shadows stay consistent
 - AI instinctively adds a11y props I don't need for a demo — good to have a default mental filter for "remove demo noise"

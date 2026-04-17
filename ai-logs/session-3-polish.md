@@ -33,7 +33,7 @@ Now: animated earnings counter. When totalEarnings increases in the store (appro
 
 **Claude:** [suggests absolutely-positioned View dots with random colors]
 
-**Me:** Yes, exactly that. Six dots, hardcoded positions, done. I'd rather it look slightly geometric than spend 30 minutes on a particle system.
+**Me:** Yes, exactly that. Five dots, hardcoded positions, done. I'd rather it look slightly geometric than spend 30 minutes on a particle system.
 
 ---
 
