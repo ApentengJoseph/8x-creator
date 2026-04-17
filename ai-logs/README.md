@@ -4,9 +4,7 @@ How I worked with AI on this build. Five sessions captured here, plus this meta-
 
 ## Tools used
 
-- **Cursor** (with Claude Sonnet 4.5) — primary coding environment
-- **Claude.ai** (web) — design thinking, architectural brainstorming, reflection drafting
-- **v0** — one-off for the earnings counter animation I wanted to prototype before writing in RN
+- **Claude Code** (VS Code extension, Claude Sonnet 4.6) — primary coding environment throughout
 
 ## Philosophy
 
@@ -46,4 +44,4 @@ Read them and you'll see:
 
 ## Raw vs curated
 
-These logs are lightly edited — I removed actual file paths and one credential accidentally pasted while iterating on an API key pattern (not used in final code, but belt-and-suspenders). The thinking and pushback is all there, unvarnished. You're seeing how I actually work.
+These logs are lightly edited — I removed actual file paths and condensed multi-step back-and-forths into representative exchanges. The thinking and pushback is all there, unvarnished. You're seeing how I actually work.
