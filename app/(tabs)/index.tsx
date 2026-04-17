@@ -44,17 +44,21 @@ export default function DiscoverScreen() {
 
   const ListHeader = () => (
     <View style={{ paddingBottom: 4 }}>
+      {/* Greeting */}
       <View style={{ marginBottom: 24 }}>
-        <Text style={{ color: C.textMid, fontSize: 14, marginBottom: 5 }}>{getGreeting()},</Text>
+        <Text style={{ color: C.textDim, fontSize: 13, marginBottom: 4, fontWeight: "500" }}>
+          {getGreeting()}
+        </Text>
         <Text style={{ color: C.text, fontSize: 28, fontWeight: "800", letterSpacing: -0.8, lineHeight: 34 }}>
-          Maya 👋
+          Maya
         </Text>
       </View>
 
       <EarningsCard />
 
+      {/* Section header */}
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <Text style={{ color: C.text, fontSize: 19, fontWeight: "700", letterSpacing: -0.3 }}>
+        <Text style={{ color: C.text, fontSize: 18, fontWeight: "700", letterSpacing: -0.3 }}>
           Active campaigns
         </Text>
         <View style={{
@@ -76,8 +80,8 @@ export default function DiscoverScreen() {
       <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }}>
         <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 20 }}>
           <View style={{ marginBottom: 24 }}>
-            <View style={{ height: 12, width: 130, backgroundColor: C.bgDeep, borderRadius: 6, marginBottom: 10 }} />
-            <View style={{ height: 30, width: 190, backgroundColor: C.bgDeep, borderRadius: 8 }} />
+            <View style={{ height: 10, width: 110, backgroundColor: C.bgDeep, borderRadius: 5, marginBottom: 10 }} />
+            <View style={{ height: 28, width: 130, backgroundColor: C.bgDeep, borderRadius: 7 }} />
           </View>
           {[1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)}
         </View>

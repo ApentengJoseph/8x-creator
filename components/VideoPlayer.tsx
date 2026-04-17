@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, StatusBar } from "react-native";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { LinearGradient } from "expo-linear-gradient";
@@ -28,17 +28,24 @@ export function VideoPlayer({ video }: Props) {
   const player = useVideoPlayer(video.videoUrl, (p) => {
     p.loop  = true;
     p.muted = true;
-    // Buffer less aggressively — avoids stuttering on large local assets
     p.bufferOptions = {
-      preferredForwardBufferDuration: 4,
-      waitsToMinimizeStalling: false,
+      preferredForwardBufferDuration: 8,
+      waitsToMinimizeStalling: true,  // wait for enough data before playing
     };
   });
+
+  // readyToPlay fires on every loop iteration — use a ref so we only
+  // seek to the thumbnail frame and read duration on the very first load.
+  const hasInit = useRef(false);
+
+  // Keep a stable ref to stopFn so the unmount cleanup captures the latest version.
+  const stopFnRef = useRef<() => void>(() => {});
 
   // Seek to frame 1 s once loaded → real thumbnail
   useEffect(() => {
     const sub = player.addListener("statusChange", ({ status }: { status: string }) => {
-      if (status === "readyToPlay") {
+      if (status === "readyToPlay" && !hasInit.current) {
+        hasInit.current = true;
         try { player.currentTime = 1; } catch {}
         setIsReady(true);
         if (player.duration > 0 && isFinite(player.duration)) {
@@ -53,7 +60,7 @@ export function VideoPlayer({ video }: Props) {
   // the native player before this effect cleanup runs.
   useEffect(() => {
     return () => {
-      releasePlayback(stopFn);
+      releasePlayback(stopFnRef.current);
       try { player.pause(); player.currentTime = 0; } catch {}
     };
   }, []);
@@ -63,6 +70,9 @@ export function VideoPlayer({ video }: Props) {
     try { player.currentTime = 1; } catch {}
     setIsPlaying(false);
   }, [player]);
+
+  // Keep ref in sync so unmount cleanup always calls the latest stopFn
+  stopFnRef.current = stopFn;
 
   const handlePlay = useCallback(() => {
     claimPlayback(stopFn);       // stops any other playing video first

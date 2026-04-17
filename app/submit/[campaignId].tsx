@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { C } from "../../constants/colors";
 import { CAMPAIGNS } from "../../data/campaigns";
@@ -20,20 +21,19 @@ const PLATFORM_CONFIG = {
   tiktok: {
     label: "TikTok",
     placeholder: "https://www.tiktok.com/@user/video/...",
-    icon: "musical-notes" as const,
-    color: "#18181b",
-    activeBg: "rgba(0,0,0,0.05)",
-    activeBorder: "rgba(0,0,0,0.2)",
   },
   instagram: {
     label: "Instagram",
     placeholder: "https://www.instagram.com/reel/...",
-    icon: "logo-instagram" as const,
-    color: "#be185d",
-    activeBg: "rgba(190,24,93,0.07)",
-    activeBorder: "rgba(190,24,93,0.25)",
   },
 };
+
+function PlatformIcon({ platform, size, color }: { platform: SubmitPlatform; size: number; color: string }) {
+  if (platform === "tiktok") {
+    return <FontAwesome5 name="tiktok" size={size} color={color} />;
+  }
+  return <Ionicons name="logo-instagram" size={size + 1} color={color} />;
+}
 
 export default function SubmitScreen() {
   const { campaignId } = useLocalSearchParams<{ campaignId: string }>();
@@ -54,7 +54,6 @@ export default function SubmitScreen() {
   const parsed = isUrlValid ? parseVideoUrl(url) : null;
   const canSubmit = isUrlValid && confirmed;
 
-  // Default to the campaign's preferred platform; user can always switch
   useEffect(() => {
     if (campaign?.platform === "instagram") setSelectedPlatform("instagram");
     else setSelectedPlatform("tiktok");
@@ -96,49 +95,33 @@ export default function SubmitScreen() {
           paddingHorizontal: 40, opacity: successOpacity,
           transform: [{ scale: successScale }],
         }}>
-          {[
-            { color: C.green,  top: 130, left: 55  },
-            { color: C.amber,  top: 170, left: 290 },
-            { color: "#60a5fa",top: 210, left: 85  },
-            { color: "#f472b6",top: 110, left: 240 },
-            { color: "#a78bfa",top: 250, left: 310 },
-          ].map((dot, i) => (
-            <View key={i} style={{
-              position: "absolute", top: dot.top, left: dot.left,
-              width: 9, height: 9, borderRadius: 5,
-              backgroundColor: dot.color, opacity: 0.55,
-            }} />
-          ))}
-
           <View style={{
-            width: 80, height: 80, borderRadius: 40,
+            width: 76, height: 76, borderRadius: 38,
             backgroundColor: C.greenBg,
             borderWidth: 1.5, borderColor: C.greenBorder,
             alignItems: "center", justifyContent: "center", marginBottom: 24,
             ...C.shadowMd,
           }}>
-            <Ionicons name="checkmark" size={38} color={C.green} />
+            <Ionicons name="checkmark" size={36} color={C.green} />
           </View>
-
-          <Text style={{ color: C.text, fontSize: 26, fontWeight: "800", marginBottom: 12, textAlign: "center", letterSpacing: -0.5 }}>
-            Submitted!
+          <Text style={{ color: C.text, fontSize: 26, fontWeight: "800", marginBottom: 10, textAlign: "center", letterSpacing: -0.5 }}>
+            Submitted
           </Text>
           <Text style={{ color: C.textMid, fontSize: 15, textAlign: "center", lineHeight: 24 }}>
-            In review now. You'll hear back within 24 hours — {formatPayout(campaign.payout)} is on the line.
+            Under review now. You'll hear back within 24 hours — {formatPayout(campaign.payout)} is on the line.
           </Text>
         </Animated.View>
       </SafeAreaView>
     );
   }
 
-  const platformCfg = PLATFORM_CONFIG[selectedPlatform];
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={["top"]}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
-        {/* Header */}
+
+        {/* ── Header ──────────────────────────────────────── */}
         <View style={{
-          paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8,
+          paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12,
           flexDirection: "row", alignItems: "center", gap: 12,
           borderBottomWidth: 1, borderBottomColor: C.border,
           backgroundColor: C.bg,
@@ -146,14 +129,16 @@ export default function SubmitScreen() {
           <TouchableOpacity
             onPress={() => { Haptics.selectionAsync(); router.back(); }}
             style={{
-              width: 36, height: 36, borderRadius: 12,
+              width: 36, height: 36, borderRadius: 11,
               backgroundColor: C.card, alignItems: "center", justifyContent: "center",
-              borderWidth: 1, borderColor: C.border, ...C.shadow,
+              borderWidth: 1, borderColor: C.border,
             }}
           >
-            <Ionicons name="close" size={18} color={C.textMid} />
+            <Ionicons name="chevron-back" size={20} color={C.textMid} />
           </TouchableOpacity>
-          <Text style={{ color: C.text, fontSize: 18, fontWeight: "700" }}>Submit video</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: C.text, fontSize: 17, fontWeight: "700" }}>Submit video</Text>
+          </View>
         </View>
 
         <ScrollView
@@ -161,17 +146,19 @@ export default function SubmitScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Campaign reminder */}
+          {/* ── Campaign context card ───────────────────── */}
           <View style={{
-            backgroundColor: C.card, borderRadius: 16, padding: 14,
-            marginTop: 16, marginBottom: 24,
-            flexDirection: "row", alignItems: "center",
-            borderWidth: 1, borderColor: C.border, ...C.shadow,
+            backgroundColor: C.card,
+            borderRadius: 16, padding: 14,
+            marginTop: 20, marginBottom: 24,
+            flexDirection: "row", alignItems: "center", gap: 12,
+            borderWidth: 1, borderColor: C.border,
+            ...C.shadowMd,
           }}>
             <View style={{
-              width: 40, height: 40, borderRadius: 12,
+              width: 42, height: 42, borderRadius: 12,
               backgroundColor: campaign.brandAvatarColor,
-              alignItems: "center", justifyContent: "center", marginRight: 12,
+              alignItems: "center", justifyContent: "center",
             }}>
               <Text style={{ color: "rgba(255,255,255,0.95)", fontSize: 12, fontWeight: "800" }}>
                 {campaign.brandAvatar}
@@ -184,7 +171,8 @@ export default function SubmitScreen() {
               </Text>
             </View>
             <View style={{
-              backgroundColor: C.greenBg, paddingHorizontal: 11, paddingVertical: 6,
+              backgroundColor: C.greenBg,
+              paddingHorizontal: 11, paddingVertical: 6,
               borderRadius: 20, borderWidth: 1, borderColor: C.greenBorder,
             }}>
               <Text style={{ color: C.greenText, fontSize: 15, fontWeight: "700" }}>
@@ -193,136 +181,134 @@ export default function SubmitScreen() {
             </View>
           </View>
 
-          {/* Platform toggle — always visible so creators can choose */}
-          <View style={{ marginBottom: 24 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-              <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 0.8 }}>
-                PLATFORM
-              </Text>
-              {campaign.platform !== "both" && (
-                <Text style={{ color: C.textDim, fontSize: 11 }}>
-                  Campaign prefers {campaign.platform === "tiktok" ? "TikTok" : "Instagram"}
-                </Text>
-              )}
-            </View>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              {(["tiktok", "instagram"] as SubmitPlatform[]).map((p) => {
-                const cfg = PLATFORM_CONFIG[p];
-                const active = selectedPlatform === p;
-                const preferred = campaign.platform === p || campaign.platform === "both";
-                return (
-                  <TouchableOpacity
-                    key={p}
-                    onPress={() => { Haptics.selectionAsync(); setSelectedPlatform(p); setUrl(""); setUrlTouched(false); }}
-                    style={{
-                      flex: 1, flexDirection: "row", alignItems: "center",
-                      justifyContent: "center", gap: 7, paddingVertical: 12,
-                      borderRadius: 12, borderWidth: 1.5,
-                      backgroundColor: active ? cfg.activeBg : C.card,
-                      borderColor: active ? cfg.activeBorder : C.border,
-                      ...C.shadow,
-                    }}
-                  >
-                    <Ionicons name={cfg.icon} size={15} color={active ? cfg.color : C.textDim} />
-                    <View>
-                      <Text style={{ color: active ? cfg.color : C.textMid, fontSize: 13, fontWeight: "600" }}>
-                        {cfg.label}
+          {/* ── Platform toggle ─────────────────────────── */}
+          <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 0.9, marginBottom: 10 }}>
+            PLATFORM
+          </Text>
+          <View style={{ flexDirection: "row", gap: 10, marginBottom: 24 }}>
+            {(["tiktok", "instagram"] as SubmitPlatform[]).map((p) => {
+              const active = selectedPlatform === p;
+              const preferred = campaign.platform === p || campaign.platform === "both";
+              return (
+                <TouchableOpacity
+                  key={p}
+                  onPress={() => { Haptics.selectionAsync(); setSelectedPlatform(p); setUrl(""); setUrlTouched(false); }}
+                  style={{
+                    flex: 1, flexDirection: "row", alignItems: "center",
+                    justifyContent: "center", gap: 8, paddingVertical: 14,
+                    borderRadius: 14, borderWidth: 1.5,
+                    backgroundColor: active ? C.card : C.card,
+                    borderColor: active ? C.greenBorder : C.border,
+                    ...C.shadow,
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <PlatformIcon
+                    platform={p}
+                    size={15}
+                    color={active ? C.text : C.textDim}
+                  />
+                  <View>
+                    <Text style={{
+                      color: active ? C.text : C.textMid,
+                      fontSize: 13, fontWeight: "600",
+                    }}>
+                      {PLATFORM_CONFIG[p].label}
+                    </Text>
+                    {preferred && campaign.platform !== "both" && (
+                      <Text style={{
+                        color: active ? C.textMid : C.textDim,
+                        fontSize: 9, fontWeight: "600",
+                      }}>
+                        preferred
                       </Text>
-                      {preferred && campaign.platform !== "both" && (
-                        <Text style={{ color: active ? cfg.color : C.textDim, fontSize: 9, fontWeight: "600", opacity: 0.8 }}>
-                          preferred
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
-          {/* URL input */}
-          <View style={{ marginBottom: 16 }}>
-            <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 0.8, marginBottom: 10 }}>
-              {formatPlatform(selectedPlatform).toUpperCase()} VIDEO URL
-            </Text>
-            <View style={{
-              flexDirection: "row", alignItems: "center",
-              backgroundColor: C.card, borderRadius: 14,
-              borderWidth: 1.5, paddingHorizontal: 14,
-              borderColor: urlTouched
-                ? (isUrlValid ? C.greenBorder : C.redBorder)
-                : C.border,
-              ...C.shadow,
-            }}>
-              <Ionicons
-                name={platformCfg.icon}
-                size={16}
+          {/* ── URL input ───────────────────────────────── */}
+          <Text style={{ color: C.textDim, fontSize: 11, fontWeight: "700", letterSpacing: 0.9, marginBottom: 10 }}>
+            {PLATFORM_CONFIG[selectedPlatform].label.toUpperCase()} VIDEO URL
+          </Text>
+          <View style={{
+            flexDirection: "row", alignItems: "center",
+            backgroundColor: C.card, borderRadius: 14,
+            borderWidth: 1.5, paddingHorizontal: 14,
+            borderColor: urlTouched
+              ? (isUrlValid ? C.greenBorder : C.redBorder)
+              : C.border,
+            marginBottom: 8,
+            ...C.shadow,
+          }}>
+            <View style={{ marginRight: 10 }}>
+              <PlatformIcon
+                platform={selectedPlatform}
+                size={15}
                 color={urlTouched && isUrlValid ? C.green : C.textDim}
-                style={{ marginRight: 10 }}
               />
-              <TextInput
-                value={url}
-                onChangeText={(v) => { setUrl(v); if (!urlTouched && v.length > 5) setUrlTouched(true); }}
-                onBlur={() => setUrlTouched(true)}
-                placeholder={platformCfg.placeholder}
-                placeholderTextColor={C.textDim}
-                style={{ flex: 1, color: C.text, fontSize: 13, paddingVertical: 15 }}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="url"
-              />
-              {urlTouched && url.length > 0 && (
-                <Ionicons
-                  name={isUrlValid ? "checkmark-circle" : "close-circle"}
-                  size={20}
-                  color={isUrlValid ? C.green : C.red}
-                />
-              )}
             </View>
-            {urlTouched && !isUrlValid && url.length > 0 && (
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 5, marginTop: 7 }}>
-                <Ionicons name="information-circle-outline" size={13} color={C.red} />
-                <Text style={{ color: C.red, fontSize: 12 }}>
-                  Paste a {selectedPlatform === "tiktok" ? "TikTok video" : "Instagram Reel"} URL
-                </Text>
-              </View>
+            <TextInput
+              value={url}
+              onChangeText={(v) => { setUrl(v); if (!urlTouched && v.length > 5) setUrlTouched(true); }}
+              onBlur={() => setUrlTouched(true)}
+              placeholder={PLATFORM_CONFIG[selectedPlatform].placeholder}
+              placeholderTextColor={C.textDim}
+              style={{ flex: 1, color: C.text, fontSize: 13, paddingVertical: 15 }}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="url"
+            />
+            {urlTouched && url.length > 0 && (
+              <Ionicons
+                name={isUrlValid ? "checkmark-circle" : "close-circle"}
+                size={20}
+                color={isUrlValid ? C.green : C.red}
+              />
             )}
           </View>
 
-          {/* Live URL preview */}
+          {urlTouched && !isUrlValid && url.length > 0 && (
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 5, marginBottom: 16 }}>
+              <Ionicons name="information-circle-outline" size={13} color={C.red} />
+              <Text style={{ color: C.red, fontSize: 12 }}>
+                Paste a valid {selectedPlatform === "tiktok" ? "TikTok video" : "Instagram Reel"} URL
+              </Text>
+            </View>
+          )}
+
+          {/* ── URL preview card ────────────────────────── */}
           {isUrlValid && parsed && (
             <View style={{
-              backgroundColor: C.card, borderRadius: 14, marginBottom: 24,
+              backgroundColor: C.card, borderRadius: 14, marginTop: 4, marginBottom: 24,
               borderWidth: 1, borderColor: C.greenBorder, overflow: "hidden",
               ...C.shadow,
             }}>
-              {/* Platform color strip */}
-              <View style={{ height: 3, backgroundColor: parsed.platform === "tiktok" ? "#18181b" : "#be185d" }} />
-
+              <View style={{ height: 3, backgroundColor: C.green, opacity: 0.5 }} />
               <View style={{ padding: 14, flexDirection: "row", alignItems: "center", gap: 12 }}>
                 <View style={{
-                  width: 46, height: 46, borderRadius: 13,
-                  backgroundColor: parsed.platform === "tiktok" ? "rgba(0,0,0,0.06)" : "rgba(190,24,93,0.08)",
+                  width: 44, height: 44, borderRadius: 12,
+                  backgroundColor: C.bgDeep,
                   alignItems: "center", justifyContent: "center",
-                  borderWidth: 1,
-                  borderColor: parsed.platform === "tiktok" ? C.borderMid : "rgba(190,24,93,0.2)",
+                  borderWidth: 1, borderColor: C.border,
                 }}>
-                  <Ionicons
-                    name={parsed.platform === "tiktok" ? "musical-notes" : "logo-instagram"}
-                    size={22}
-                    color={parsed.platform === "tiktok" ? "#18181b" : "#be185d"}
+                  <PlatformIcon
+                    platform={parsed.platform as SubmitPlatform}
+                    size={20}
+                    color={C.textMid}
                   />
                 </View>
-
                 <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                    <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: C.green }} />
-                    <Text style={{ color: C.greenText, fontSize: 11, fontWeight: "700", letterSpacing: 0.5 }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5, marginBottom: 4 }}>
+                    <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: C.green }} />
+                    <Text style={{ color: C.greenText, fontSize: 10, fontWeight: "700", letterSpacing: 0.5 }}>
                       VIDEO DETECTED
                     </Text>
                   </View>
                   {parsed.username && (
-                    <Text style={{ color: C.text, fontSize: 14, fontWeight: "700", marginBottom: 2 }}>
+                    <Text style={{ color: C.text, fontSize: 14, fontWeight: "700", marginBottom: 1 }}>
                       @{parsed.username}
                     </Text>
                   )}
@@ -330,16 +316,15 @@ export default function SubmitScreen() {
                     {parsed.displayUrl}
                   </Text>
                 </View>
-
-                <Ionicons name="open-outline" size={16} color={C.textDim} />
+                <Ionicons name="open-outline" size={15} color={C.textDim} />
               </View>
             </View>
           )}
 
-          {/* Confirmation checkbox */}
+          {/* ── Confirmation checkbox ───────────────────── */}
           <TouchableOpacity
             onPress={() => { Haptics.selectionAsync(); setConfirmed((v) => !v); }}
-            style={{ flexDirection: "row", alignItems: "flex-start", marginBottom: 8 }}
+            style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}
             activeOpacity={0.7}
           >
             <View style={{
@@ -348,9 +333,9 @@ export default function SubmitScreen() {
               borderColor: confirmed ? C.green : C.borderMid,
               backgroundColor: confirmed ? C.greenBg : C.card,
               alignItems: "center", justifyContent: "center",
-              marginRight: 12, marginTop: 1,
+              marginTop: 1,
             }}>
-              {confirmed && <Ionicons name="checkmark" size={14} color={C.green} />}
+              {confirmed && <Ionicons name="checkmark" size={13} color={C.green} />}
             </View>
             <Text style={{ color: C.textMid, fontSize: 13, lineHeight: 21, flex: 1 }}>
               My video matches the brief and I own the content or have rights to submit it.
@@ -358,7 +343,7 @@ export default function SubmitScreen() {
           </TouchableOpacity>
         </ScrollView>
 
-        {/* Sticky CTA */}
+        {/* ── Sticky CTA ──────────────────────────────────── */}
         <View style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
           paddingHorizontal: 16, paddingTop: 12, paddingBottom: 36,
