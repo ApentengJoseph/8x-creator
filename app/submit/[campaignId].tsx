@@ -3,6 +3,7 @@ import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   KeyboardAvoidingView, Platform, Animated, Image, ActivityIndicator,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -196,18 +197,22 @@ export default function SubmitScreen() {
           <Animated.View style={{
             position: "absolute",
             width: 140, height: 140, borderRadius: 70,
-            backgroundColor: C.greenBg,
+            backgroundColor: "rgba(168,85,247,0.12)",
             transform: [{ scale: successRing }],
           }} />
           <Animated.View style={{
             width: 80, height: 80, borderRadius: 40,
-            backgroundColor: C.green,
             alignItems: "center", justifyContent: "center",
             marginBottom: 28,
             transform: [{ scale: successCircle }],
-            ...C.shadowMd,
+            overflow: "hidden",
           }}>
-            <Ionicons name="checkmark" size={40} color={C.text} />
+            <LinearGradient
+              colors={[C.accentGradStart, C.accentGradEnd]}
+              start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+              style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+            />
+            <Ionicons name="checkmark" size={40} color="#fff" />
           </Animated.View>
           <Animated.View style={{ alignItems: "center", opacity: successContent }}>
             <Text style={{ color: C.text, fontSize: 28, fontWeight: "800", marginBottom: 10, letterSpacing: -0.6, textAlign: "center" }}>
@@ -217,10 +222,10 @@ export default function SubmitScreen() {
               Your video is under review.{"\n"}You'll hear back within 24 hours.
             </Text>
             <View style={{
-              backgroundColor: C.greenBg, borderWidth: 1, borderColor: C.greenBorder,
+              backgroundColor: "rgba(168,85,247,0.12)", borderWidth: 1, borderColor: "rgba(168,85,247,0.35)",
               borderRadius: 100, paddingHorizontal: 20, paddingVertical: 9,
             }}>
-              <Text style={{ color: C.greenText, fontSize: 15, fontWeight: "700" }}>
+              <Text style={{ color: C.accent, fontSize: 15, fontWeight: "700" }}>
                 {formatPayout(campaign.payout)} on the line 💸
               </Text>
             </View>
@@ -231,7 +236,7 @@ export default function SubmitScreen() {
   }
 
   const borderColor = inputFocused
-    ? C.green
+    ? C.accent
     : urlTouched && url.length > 0
       ? (isUrlValid ? C.greenBorder : C.redBorder)
       : C.border;
@@ -249,23 +254,23 @@ export default function SubmitScreen() {
           <TouchableOpacity
             onPress={() => { Haptics.selectionAsync(); router.back(); }}
             style={{
-              width: 36, height: 36, borderRadius: 18,
-              backgroundColor: C.bgDeep,
-              alignItems: "center", justifyContent: "center",
-              borderWidth: 1, borderColor: C.border,
+              paddingHorizontal: 14, paddingVertical: 6,
+              borderRadius: 99,
+              backgroundColor: "rgba(255,255,255,0.08)",
+              flexDirection: "row", alignItems: "center", gap: 6,
             }}
           >
-            <Ionicons name="chevron-back" size={20} color={C.text} />
+            <Ionicons name="chevron-back" size={14} color={C.textMid} />
+            <Text style={{ color: C.textMid, fontSize: 13 }}>{campaign.brandName}</Text>
           </TouchableOpacity>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 17, fontWeight: "700", color: C.text }}>Submit video</Text>
-            <Text style={{ fontSize: 12, color: C.textDim, marginTop: 1 }}>{campaign.brandName}</Text>
+            <Text style={{ fontSize: 17, fontWeight: "700", color: C.text, textAlign: "right" }}>Submit video</Text>
           </View>
           <View style={{
-            backgroundColor: C.greenBg, borderWidth: 1, borderColor: C.greenBorder,
+            backgroundColor: "rgba(168,85,247,0.12)", borderWidth: 1, borderColor: "rgba(168,85,247,0.35)",
             borderRadius: 100, paddingHorizontal: 12, paddingVertical: 5,
           }}>
-            <Text style={{ color: C.greenText, fontSize: 14, fontWeight: "700" }}>
+            <Text style={{ color: C.accent, fontSize: 14, fontWeight: "700" }}>
               {formatPayout(campaign.payout)}
             </Text>
           </View>
@@ -282,7 +287,7 @@ export default function SubmitScreen() {
             <SectionLabel step="1" title="Where did you post it?" />
             <View style={{
               flexDirection: "row",
-              backgroundColor: C.bgDeep,
+              backgroundColor: C.bg2,
               borderRadius: 12, padding: 4,
               marginTop: 12,
             }}>
@@ -304,14 +309,15 @@ export default function SubmitScreen() {
                       alignItems: "center", justifyContent: "center",
                       gap: 8, paddingVertical: 13,
                       borderRadius: 9,
-                      backgroundColor: active ? C.card : "transparent",
-                      ...(active ? C.shadow : {}),
+                      borderWidth: active ? 1.5 : 0,
+                      borderColor: active ? C.accent : "transparent",
+                      backgroundColor: active ? `${C.accent}15` : "transparent",
                     }}
                   >
-                    <PlatformIcon platform={p} size={14} color={active ? C.text : C.textDim} />
+                    <PlatformIcon platform={p} size={14} color={active ? C.accent : C.textDim} />
                     <Text style={{
                       fontSize: 14, fontWeight: active ? "700" : "500",
-                      color: active ? C.text : C.textDim,
+                      color: active ? C.accent : C.textDim,
                     }}>
                       {PLATFORM_CONFIG[p].label}
                     </Text>
@@ -328,7 +334,7 @@ export default function SubmitScreen() {
             <Animated.View style={[{ marginTop: 12 }, { transform: [{ translateX: shakeAnim }] }]}>
               <View style={{
                 flexDirection: "row", alignItems: "center",
-                backgroundColor: C.card, borderRadius: 12,
+                backgroundColor: C.bg1, borderRadius: 12,
                 borderWidth: 1.5, paddingHorizontal: 14,
                 borderColor, ...C.shadow,
               }}>
@@ -336,7 +342,7 @@ export default function SubmitScreen() {
                   <PlatformIcon
                     platform={selectedPlatform}
                     size={15}
-                    color={inputFocused || (urlTouched && isUrlValid) ? C.greenText : C.textDim}
+                    color={inputFocused || (urlTouched && isUrlValid) ? C.green : C.textDim}
                   />
                 </View>
                 <TextInput
@@ -398,7 +404,7 @@ export default function SubmitScreen() {
                     <View style={{ padding: 14 }}>
                       <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
                         <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: C.green }} />
-                        <Text style={{ color: C.greenText, fontSize: 10, fontWeight: "700", letterSpacing: 0.5 }}>
+                        <Text style={{ color: C.green, fontSize: 10, fontWeight: "700", letterSpacing: 0.5 }}>
                           LOADING PREVIEW…
                         </Text>
                         <ActivityIndicator size="small" color={C.green} style={{ marginLeft: 4 }} />
@@ -420,7 +426,7 @@ export default function SubmitScreen() {
                       <View style={{ padding: 14 }}>
                         <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 8 }}>
                           <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: C.green }} />
-                          <Text style={{ color: C.greenText, fontSize: 10, fontWeight: "700", letterSpacing: 0.5 }}>
+                          <Text style={{ color: C.green, fontSize: 10, fontWeight: "700", letterSpacing: 0.5 }}>
                             VIDEO DETECTED
                           </Text>
                           <View style={{ flex: 1 }} />
@@ -456,7 +462,7 @@ export default function SubmitScreen() {
           <Animated.View style={[animStyle(section3), { marginTop: 28 }]}>
             <SectionLabel step="3" title="Before you submit" />
             <View style={{
-              marginTop: 12, backgroundColor: C.card, borderRadius: 12,
+              marginTop: 12, backgroundColor: C.bg1, borderRadius: 12,
               borderWidth: 1, borderColor: C.border, padding: 14, ...C.shadow,
             }}>
               {[
@@ -467,7 +473,7 @@ export default function SubmitScreen() {
                 <View key={i} style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: i < 2 ? 10 : 0 }}>
                   <View style={{
                     width: 20, height: 20, borderRadius: 10,
-                    backgroundColor: C.bgDeep, borderWidth: 1, borderColor: C.border,
+                    backgroundColor: C.bg3, borderWidth: 1, borderColor: C.border,
                     alignItems: "center", justifyContent: "center",
                   }}>
                     <Ionicons name="checkmark" size={11} color={C.textDim} />
@@ -485,7 +491,7 @@ export default function SubmitScreen() {
               activeOpacity={0.8}
               style={{
                 flexDirection: "row", alignItems: "center", gap: 14,
-                backgroundColor: C.card,
+                backgroundColor: C.bg1,
                 borderRadius: 14, padding: 16,
                 borderWidth: 1, borderColor: C.border,
                 ...C.shadow,
@@ -508,12 +514,13 @@ export default function SubmitScreen() {
         </ScrollView>
 
         {/* ── Sticky CTA ───────────────────────────────────── */}
-        <View style={{
-          position: "absolute", bottom: 0, left: 0, right: 0,
-          paddingHorizontal: 20, paddingTop: 14, paddingBottom: 38,
-          backgroundColor: "rgba(247,247,245,0.97)",
-          borderTopWidth: 1, borderTopColor: C.border,
-        }}>
+        <LinearGradient
+          colors={["transparent", C.bg]}
+          style={{
+            position: "absolute", bottom: 0, left: 0, right: 0,
+            paddingHorizontal: 20, paddingTop: 24, paddingBottom: 38,
+          }}
+        >
           {!canSubmit && (
             <Text style={{ textAlign: "center", color: C.textDim, fontSize: 12, marginBottom: 10 }}>
               {!isUrlValid ? "Add a valid video link to continue" : "Check the confirmation box above"}
@@ -523,22 +530,36 @@ export default function SubmitScreen() {
             onPress={handleSubmit}
             disabled={!canSubmit}
             activeOpacity={0.85}
-            style={{
-              backgroundColor: canSubmit ? C.green : C.bgDeep,
-              borderRadius: 14, paddingVertical: 17,
-              alignItems: "center", flexDirection: "row",
-              justifyContent: "center", gap: 8,
-              borderWidth: 1,
-              borderColor: canSubmit ? "transparent" : C.border,
-              ...C.shadowMd,
-            }}
           >
-            <Text style={{ color: canSubmit ? C.text : C.textDim, fontSize: 16, fontWeight: "700" }}>
-              Submit for review
-            </Text>
-            {canSubmit && <Ionicons name="arrow-forward" size={17} color={C.text} />}
+            {canSubmit ? (
+              <LinearGradient
+                colors={[C.accentGradStart, C.accentGradEnd]}
+                start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                style={{
+                  borderRadius: 14, paddingVertical: 17,
+                  alignItems: "center", flexDirection: "row",
+                  justifyContent: "center", gap: 8,
+                  ...C.shadowAccent,
+                }}
+              >
+                <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700" }}>
+                  Submit Video →
+                </Text>
+              </LinearGradient>
+            ) : (
+              <View style={{
+                backgroundColor: C.bg2,
+                borderRadius: 14, paddingVertical: 17,
+                alignItems: "center",
+                borderWidth: 1, borderColor: C.border,
+              }}>
+                <Text style={{ color: C.textDim, fontSize: 16, fontWeight: "700" }}>
+                  Submit Video →
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
-        </View>
+        </LinearGradient>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -549,10 +570,11 @@ function SectionLabel({ step, title }: { step: string; title: string }) {
     <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
       <View style={{
         width: 22, height: 22, borderRadius: 11,
-        backgroundColor: C.text,
+        backgroundColor: "rgba(168,85,247,0.2)",
+        borderWidth: 1, borderColor: "rgba(168,85,247,0.4)",
         alignItems: "center", justifyContent: "center",
       }}>
-        <Text style={{ color: "#fff", fontSize: 11, fontWeight: "800" }}>{step}</Text>
+        <Text style={{ color: C.accent, fontSize: 11, fontWeight: "800" }}>{step}</Text>
       </View>
       <Text style={{ fontSize: 15, fontWeight: "700", color: C.text }}>{title}</Text>
     </View>
@@ -575,7 +597,7 @@ function SkeletonRow({ width, height, style }: { width: string | number; height:
     <Animated.View style={[{
       width, height,
       borderRadius: 4,
-      backgroundColor: C.bgDeep,
+      backgroundColor: C.bg3,
       opacity: pulse,
     }, style]} />
   );

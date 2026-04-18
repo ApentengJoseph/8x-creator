@@ -17,12 +17,12 @@ export function SkeletonCard() {
   }, []);
 
   const Bone = ({ w, h, radius = 6 }: { w: number | string; h: number; radius?: number }) => (
-    <Animated.View style={{ width: w as any, height: h, borderRadius: radius, backgroundColor: C.bgDeep, opacity: pulse }} />
+    <Animated.View style={{ width: w as any, height: h, borderRadius: radius, backgroundColor: C.bg3, opacity: pulse }} />
   );
 
   return (
     <View style={{
-      backgroundColor: C.card,
+      backgroundColor: C.bg1,
       borderRadius: 16, padding: 16,
       borderWidth: 1, borderColor: C.border,
       flexDirection: "row", alignItems: "center", gap: 14,

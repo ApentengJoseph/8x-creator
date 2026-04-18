@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Animated, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,7 +31,6 @@ export default function ProfileScreen() {
     ? Math.round((approvedCount / submissions.length) * 100)
     : 0;
 
-  // All animations use useNativeDriver: true — no mixing
   const avatarScale   = useRef(new Animated.Value(0.75)).current;
   const contentFade   = useRef(new Animated.Value(0)).current;
   const coverFade     = useRef(new Animated.Value(0)).current;
@@ -51,10 +51,15 @@ export default function ProfileScreen() {
       }}>
         <TouchableOpacity
           onPress={() => { Haptics.selectionAsync(); router.back(); }}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: -4 }}
+          style={{
+            paddingHorizontal: 14, paddingVertical: 6,
+            borderRadius: 99,
+            backgroundColor: "rgba(255,255,255,0.08)",
+            flexDirection: 'row', alignItems: 'center', gap: 6,
+          }}
         >
-          <Ionicons name="chevron-back" size={22} color={C.text} />
-          <Text style={{ fontSize: 15, color: C.text, fontWeight: '500' }}>Back</Text>
+          <Ionicons name="chevron-back" size={14} color={C.textMid} />
+          <Text style={{ fontSize: 13, color: C.textMid }}>Back</Text>
         </TouchableOpacity>
         <Text style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: '700', color: C.text, marginRight: 44 }}>
           Profile
@@ -70,10 +75,9 @@ export default function ProfileScreen() {
             style={{ width: '100%', height: '100%' }}
             resizeMode="cover"
           />
-          {/* Dark overlay for depth */}
           <View style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.25)',
+            backgroundColor: 'rgba(0,0,0,0.45)',
           }} />
         </Animated.View>
 
@@ -92,7 +96,7 @@ export default function ProfileScreen() {
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <View style={{ width: 7, height: 7, borderRadius: 3.5, backgroundColor: C.green }} />
-            <Text style={{ color: C.greenText, fontSize: 13, fontWeight: '600' }}>Creator · Active</Text>
+            <Text style={{ color: C.green, fontSize: 13, fontWeight: '600' }}>Creator · Active</Text>
           </View>
         </Animated.View>
 
@@ -102,12 +106,12 @@ export default function ProfileScreen() {
           <View style={{
             flexDirection: 'row',
             marginHorizontal: 20, marginBottom: 20,
-            backgroundColor: C.card, borderRadius: 16,
+            backgroundColor: C.bg1, borderRadius: 16,
             borderWidth: 1, borderColor: C.border,
             overflow: 'hidden', ...C.shadow,
           }}>
             {[
-              { label: 'Earned',    value: `$${totalEarnings.toLocaleString('en-US')}`, color: C.greenText },
+              { label: 'Earned',    value: `$${totalEarnings.toLocaleString('en-US')}`, color: C.accent },
               { label: 'Submitted', value: String(submissions.length),                   color: C.text },
               { label: 'Approval',  value: submissions.length > 0 ? `${approvalRate}%` : '—', color: C.text },
             ].map((stat, i) => (
@@ -133,7 +137,7 @@ export default function ProfileScreen() {
             }}>
               <View style={{
                 width: 32, height: 32, borderRadius: 10,
-                backgroundColor: 'rgba(255,149,0,0.14)',
+                backgroundColor: 'rgba(245,158,11,0.14)',
                 alignItems: 'center', justifyContent: 'center',
               }}>
                 <Ionicons name="time-outline" size={17} color={C.amber} />
@@ -159,7 +163,7 @@ export default function ProfileScreen() {
 
           <View style={{
             marginHorizontal: 20,
-            backgroundColor: C.card, borderRadius: 16,
+            backgroundColor: C.bg1, borderRadius: 16,
             borderWidth: 1, borderColor: C.border,
             overflow: 'hidden', ...C.shadow,
           }}>
@@ -174,7 +178,7 @@ export default function ProfileScreen() {
             activeOpacity={0.7}
             style={{
               marginHorizontal: 20, marginTop: 16,
-              backgroundColor: C.card, borderRadius: 14,
+              backgroundColor: C.bg1, borderRadius: 14,
               borderWidth: 1, borderColor: C.border,
               paddingVertical: 15, alignItems: 'center',
               flexDirection: 'row', justifyContent: 'center', gap: 8,
@@ -197,7 +201,6 @@ export default function ProfileScreen() {
 function MenuItem({ item, isLast }: { item: typeof MENU_ITEMS[number]; isLast: boolean }) {
   const scale = useRef(new Animated.Value(1)).current;
 
-  // Only useNativeDriver: true — no mixing
   const pressIn  = () => Animated.spring(scale, { toValue: 0.97, useNativeDriver: true, speed: 60, bounciness: 0 }).start();
   const pressOut = () => {
     Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 60, bounciness: 3 }).start();
@@ -218,7 +221,7 @@ function MenuItem({ item, isLast }: { item: typeof MENU_ITEMS[number]; isLast: b
       }}>
         <View style={{
           width: 36, height: 36, borderRadius: 10,
-          backgroundColor: C.bgDeep,
+          backgroundColor: C.bg2,
           alignItems: 'center', justifyContent: 'center',
           borderWidth: 1, borderColor: C.border,
         }}>
@@ -233,11 +236,11 @@ function MenuItem({ item, isLast }: { item: typeof MENU_ITEMS[number]; isLast: b
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           {item.badge && (
             <View style={{
-              backgroundColor: C.greenBg, borderRadius: 100,
+              backgroundColor: 'rgba(168,85,247,0.12)', borderRadius: 100,
               paddingHorizontal: 8, paddingVertical: 2,
-              borderWidth: 1, borderColor: C.greenBorder,
+              borderWidth: 1, borderColor: 'rgba(168,85,247,0.35)',
             }}>
-              <Text style={{ color: C.greenText, fontSize: 11, fontWeight: '700' }}>{item.badge}</Text>
+              <Text style={{ color: C.accent, fontSize: 11, fontWeight: '700' }}>{item.badge}</Text>
             </View>
           )}
           <Ionicons name="chevron-forward" size={14} color={C.textDim} />

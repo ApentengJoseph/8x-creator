@@ -45,7 +45,7 @@ export function EarningsCard() {
           backgroundColor: C.greenBg, borderWidth: 1, borderColor: C.greenBorder,
           alignItems: "center", justifyContent: "center",
         }}>
-          <Ionicons name="trending-up" size={20} color={C.greenText} />
+          <Ionicons name="trending-up" size={20} color={C.green} />
         </View>
       </View>
 
@@ -56,7 +56,7 @@ export function EarningsCard() {
         borderWidth: 1, borderColor: C.border,
       }}>
         {[
-          { label: "Approved", value: String(approvedCount), color: C.greenText },
+          { label: "Approved", value: String(approvedCount), color: C.green },
           { label: "Pending",  value: String(pendingCount),  color: C.amber },
           { label: "Rate",     value: `${approvalRate}%`,    color: C.text },
         ].map((stat, i) => (

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Animated, Image } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { C } from "../constants/colors";
 import { Campaign } from "../types";
-import { formatPayout, formatDeadline } from "../utils/formatters";
+import { formatDeadline } from "../utils/formatters";
 
 export function CampaignCard({ campaign }: { campaign: Campaign }) {
   const router = useRouter();
@@ -17,6 +18,8 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
     Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 50, bounciness: 2 }).start();
 
   const isLowSpots = campaign.spotsLeft <= 10;
+  const filledFraction = (campaign.spotsTotal - campaign.spotsLeft) / campaign.spotsTotal;
+  const tags = [campaign.type, campaign.platform === "both" ? "TikTok + IG" : campaign.platform].filter(Boolean);
 
   return (
     <TouchableOpacity
@@ -27,51 +30,108 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
     >
       <Animated.View style={{
         transform: [{ scale }],
-        backgroundColor: C.card,
-        borderRadius: 16,
+        backgroundColor: C.bg1,
+        borderRadius: 20,
         borderWidth: 1,
         borderColor: C.border,
-        padding: 16,
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 14,
+        overflow: "hidden",
         ...C.shadow,
       }}>
-        {/* Brand logo */}
-        <BrandLogo
-          logoUrl={campaign.logoUrl}
-          fallbackInitials={campaign.brandAvatar}
-          fallbackColor={campaign.brandAvatarColor}
-        />
+        {/* Brand-color accent stripe */}
+        <View style={{ height: 3, backgroundColor: campaign.brandAvatarColor, opacity: 0.75 }} />
 
-        {/* Info block */}
-        <View style={{ flex: 1, gap: 4 }}>
-          <Text style={{ color: C.text, fontSize: 15, fontWeight: "700", lineHeight: 20 }} numberOfLines={1}>
-            {campaign.title}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 4 }}>
-            <Text style={{ color: C.textMid, fontSize: 13 }}>{campaign.brandName}</Text>
-            <Text style={{ color: C.textDim, fontSize: 13 }}>·</Text>
-            <PlatformLabel platform={campaign.platform} />
-            <Text style={{ color: C.textDim, fontSize: 13 }}>·</Text>
-            <Text style={{ color: C.textMid, fontSize: 13 }}>{formatDeadline(campaign.daysLeft)}</Text>
-          </View>
-          {isLowSpots && (
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 1 }}>
-              <Ionicons name="flash" size={10} color={C.amber} />
-              <Text style={{ color: C.amber, fontSize: 11, fontWeight: "600" }}>
-                {campaign.spotsLeft} spots left
+        <View style={{ padding: 16 }}>
+          {/* Top row: brand + payout */}
+          <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
+            <BrandLogo
+              logoUrl={campaign.logoUrl}
+              fallbackInitials={campaign.brandAvatar}
+              fallbackColor={campaign.brandAvatarColor}
+            />
+
+            <View style={{ flex: 1, gap: 2 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                <Text style={{ color: C.text, fontSize: 15, fontWeight: "700" }}>
+                  {campaign.brandName}
+                </Text>
+                <View style={{
+                  backgroundColor: `${campaign.brandAvatarColor}22`,
+                  borderRadius: 99, paddingHorizontal: 8, paddingVertical: 2,
+                  borderWidth: 1, borderColor: `${campaign.brandAvatarColor}44`,
+                }}>
+                  <Text style={{ color: campaign.brandAvatarColor, fontSize: 11, fontWeight: "600" }}>
+                    {campaign.type}
+                  </Text>
+                </View>
+              </View>
+              <Text style={{ color: C.textMid, fontSize: 13 }} numberOfLines={1}>
+                {campaign.title}
               </Text>
             </View>
-          )}
-        </View>
 
-        {/* Payout + chevron */}
-        <View style={{ alignItems: "flex-end", gap: 5, flexShrink: 0 }}>
-          <Text style={{ color: C.greenText, fontSize: 16, fontWeight: "800", letterSpacing: -0.3 }}>
-            {formatPayout(campaign.payout)}
-          </Text>
-          <Ionicons name="chevron-forward" size={14} color={C.textDim} />
+            {/* Payout */}
+            <View style={{ alignItems: "flex-end", flexShrink: 0 }}>
+              <Text style={{ fontSize: 22, fontWeight: "800", color: C.accent, letterSpacing: -0.3 }}>
+                ${campaign.payout}
+              </Text>
+              <Text style={{ fontSize: 10, color: C.textDim }}>per video</Text>
+            </View>
+          </View>
+
+          {/* Tags */}
+          <View style={{ flexDirection: "row", gap: 5, flexWrap: "wrap", marginTop: 10 }}>
+            {tags.map((t) => (
+              <View key={t} style={{
+                backgroundColor: C.bg3, borderRadius: 6,
+                paddingHorizontal: 8, paddingVertical: 2,
+              }}>
+                <Text style={{ color: C.textDim, fontSize: 11 }}>#{t}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Footer: slots bar + deadline + chevron */}
+          <View style={{
+            flexDirection: "row", alignItems: "center", gap: 12,
+            marginTop: 12, paddingTop: 12,
+            borderTopWidth: 1, borderTopColor: C.border,
+          }}>
+            {/* Slots progress bar */}
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                <Text style={{ fontSize: 10, color: C.textDim }}>
+                  {campaign.spotsLeft} slot{campaign.spotsLeft !== 1 ? "s" : ""} left
+                </Text>
+                <Text style={{ fontSize: 10, color: C.textDim }}>
+                  {campaign.spotsTotal} total
+                </Text>
+              </View>
+              <View style={{ height: 3, backgroundColor: C.bg3, borderRadius: 99, overflow: "hidden" }}>
+                <View style={{
+                  height: "100%", borderRadius: 99,
+                  width: `${filledFraction * 100}%`,
+                  backgroundColor: campaign.brandAvatarColor,
+                }} />
+              </View>
+            </View>
+
+            {/* Deadline */}
+            <Text style={{
+              fontSize: 12, fontWeight: "600",
+              color: isLowSpots ? C.amber : C.textMid,
+            }}>
+              {isLowSpots ? "🔥 " : ""}{formatDeadline(campaign.daysLeft)}
+            </Text>
+
+            {/* Arrow */}
+            <View style={{
+              width: 28, height: 28, borderRadius: 14,
+              backgroundColor: C.bg3,
+              alignItems: "center", justifyContent: "center",
+            }}>
+              <Ionicons name="chevron-forward" size={12} color={C.textDim} />
+            </View>
+          </View>
         </View>
       </Animated.View>
     </TouchableOpacity>
@@ -88,12 +148,12 @@ function BrandLogo({ logoUrl, fallbackInitials, fallbackColor }: {
 
   return (
     <View style={{
-      width: 46, height: 46, borderRadius: 12,
-      backgroundColor: showLogo ? C.bgDeep : fallbackColor,
+      width: 46, height: 46, borderRadius: 13,
+      backgroundColor: showLogo ? "#fff" : fallbackColor,
       alignItems: "center", justifyContent: "center",
       flexShrink: 0,
       overflow: "hidden",
-      borderWidth: showLogo ? 1 : 0,
+      borderWidth: 1,
       borderColor: C.border,
     }}>
       {showLogo ? (
@@ -110,20 +170,4 @@ function BrandLogo({ logoUrl, fallbackInitials, fallbackColor }: {
       )}
     </View>
   );
-}
-
-function PlatformLabel({ platform }: { platform: string }) {
-  if (platform === "tiktok") return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-      <FontAwesome5 name="tiktok" size={9} color={C.textMid} />
-      <Text style={{ color: C.textMid, fontSize: 13 }}>TikTok</Text>
-    </View>
-  );
-  if (platform === "instagram") return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-      <Ionicons name="logo-instagram" size={10} color={C.textMid} />
-      <Text style={{ color: C.textMid, fontSize: 13 }}>Instagram</Text>
-    </View>
-  );
-  return <Text style={{ color: C.textMid, fontSize: 13 }}>TikTok / IG</Text>;
 }

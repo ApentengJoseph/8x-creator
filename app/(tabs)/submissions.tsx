@@ -19,13 +19,6 @@ const FILTERS: { key: Filter; label: string; icon: keyof typeof Ionicons.glyphMa
   { key: 'rejected', label: 'Rejected', icon: 'close-circle-outline' },
 ];
 
-const FILTER_CONFIG: Record<Filter, { color: string; bg: string; border: string }> = {
-  all:      { color: C.text,      bg: C.bgDeep,   border: C.borderMid },
-  pending:  { color: C.amber,     bg: C.amberBg,  border: C.amberBorder },
-  approved: { color: C.greenText, bg: C.greenBg,  border: C.greenBorder },
-  rejected: { color: C.red,       bg: C.redBg,    border: C.redBorder },
-};
-
 export default function SubmissionsScreen() {
   const [activeFilter, setActiveFilter] = useState<Filter>('all');
   const [refreshing, setRefreshing] = useState(false);
@@ -52,7 +45,6 @@ export default function SubmissionsScreen() {
 
   const ListHeader = () => (
     <View style={{ paddingBottom: 8 }}>
-      {/* Header */}
       <View style={{ marginBottom: 20 }}>
         <Text style={{ color: C.textMid, fontSize: 14, marginBottom: 5 }}>Your submissions,</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -62,11 +54,11 @@ export default function SubmissionsScreen() {
           {totalEarnings > 0 && (
             <View style={{
               flexDirection: 'row', alignItems: 'center', gap: 5,
-              backgroundColor: C.greenBg, paddingHorizontal: 12, paddingVertical: 6,
-              borderRadius: 20, borderWidth: 1, borderColor: C.greenBorder,
+              backgroundColor: "rgba(168,85,247,0.12)", paddingHorizontal: 12, paddingVertical: 6,
+              borderRadius: 20, borderWidth: 1, borderColor: "rgba(168,85,247,0.35)",
             }}>
-              <Ionicons name="trending-up" size={13} color={C.green} />
-              <Text style={{ color: C.greenText, fontSize: 13, fontWeight: '700' }}>
+              <Ionicons name="trending-up" size={13} color={C.accent} />
+              <Text style={{ color: C.accent, fontSize: 13, fontWeight: '700' }}>
                 ${totalEarnings.toLocaleString('en-US')} earned
               </Text>
             </View>
@@ -83,7 +75,6 @@ export default function SubmissionsScreen() {
       <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
         {FILTERS.map((f) => {
           const active = f.key === activeFilter;
-          const cfg = FILTER_CONFIG[f.key];
           const count = counts[f.key];
           return (
             <TouchableOpacity
@@ -93,8 +84,8 @@ export default function SubmissionsScreen() {
                 flexDirection: 'row', alignItems: 'center', gap: 6,
                 paddingHorizontal: 13, paddingVertical: 8,
                 borderRadius: 20, borderWidth: 1.5,
-                backgroundColor: active ? C.text : C.card,
-                borderColor: active ? C.text : C.border,
+                backgroundColor: active ? C.accent : C.bg1,
+                borderColor: active ? C.accent : C.border,
                 ...C.shadow,
               }}
             >
@@ -111,7 +102,7 @@ export default function SubmissionsScreen() {
               </Text>
               {count > 0 && (
                 <View style={{
-                  backgroundColor: active ? "rgba(255,255,255,0.2)" : C.bgDeep,
+                  backgroundColor: active ? "rgba(255,255,255,0.25)" : C.bg3,
                   borderRadius: 100, paddingHorizontal: 6, paddingVertical: 1,
                 }}>
                   <Text style={{
@@ -133,7 +124,7 @@ export default function SubmissionsScreen() {
     <View style={{ paddingTop: 60, alignItems: 'center', paddingHorizontal: 32 }}>
       <View style={{
         width: 64, height: 64, borderRadius: 20,
-        backgroundColor: C.bgDeep,
+        backgroundColor: C.bg2,
         borderWidth: 1, borderColor: C.border,
         alignItems: 'center', justifyContent: 'center', marginBottom: 16,
         ...C.shadow,
@@ -164,8 +155,8 @@ export default function SubmissionsScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={C.green}
-            colors={[C.green]}
+            tintColor={C.accent}
+            colors={[C.accent]}
           />
         }
         showsVerticalScrollIndicator={false}

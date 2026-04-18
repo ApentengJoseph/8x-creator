@@ -112,8 +112,8 @@ export default function HomeScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={C.green}
-            colors={[C.green]}
+            tintColor={C.accent}
+            colors={[C.accent]}
           />
         }
         contentContainerStyle={{ paddingBottom: 48 }}
@@ -141,10 +141,10 @@ export default function HomeScreen() {
 
           {totalEarnings > 0 && (
             <View style={{
-              backgroundColor: C.greenBg, borderWidth: 1, borderColor: C.greenBorder,
+              backgroundColor: "rgba(168,85,247,0.12)", borderWidth: 1, borderColor: "rgba(168,85,247,0.35)",
               borderRadius: 100, paddingHorizontal: 16, paddingVertical: 7,
             }}>
-              <Text style={{ color: C.greenText, fontSize: 14, fontWeight: "700" }}>
+              <Text style={{ color: C.accent, fontSize: 14, fontWeight: "700" }}>
                 ${totalEarnings.toLocaleString("en-US")} earned
               </Text>
             </View>
@@ -153,7 +153,7 @@ export default function HomeScreen() {
 
         {/* ── Segmented pill control ───────────────────────── */}
         <View style={{
-          flexDirection: "row", backgroundColor: C.bgDeep,
+          flexDirection: "row", backgroundColor: C.bg2,
           borderRadius: 100, padding: 4,
           marginHorizontal: 20, marginBottom: 28,
           position: "relative",
@@ -164,7 +164,7 @@ export default function HomeScreen() {
             top: 4, bottom: 4, left: 4,
             width: segPillWidth,
             borderRadius: 100,
-            backgroundColor: C.card,
+            backgroundColor: C.bg3,
             transform: [{ translateX: slideAnim.interpolate({ inputRange: [0, 1], outputRange: [0, segPillWidth] }) }],
             ...C.shadow,
           }} />
@@ -199,11 +199,11 @@ export default function HomeScreen() {
               </Text>
               <View style={{
                 flexDirection: "row", alignItems: "center", gap: 5,
-                backgroundColor: C.greenBg, paddingHorizontal: 10, paddingVertical: 4,
-                borderRadius: 100, borderWidth: 1, borderColor: C.greenBorder,
+                backgroundColor: "rgba(34,197,94,0.1)", paddingHorizontal: 10, paddingVertical: 4,
+                borderRadius: 100, borderWidth: 1, borderColor: "rgba(34,197,94,0.3)",
               }}>
                 <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: C.green }} />
-                <Text style={{ color: C.greenText, fontSize: 12, fontWeight: "600" }}>
+                <Text style={{ color: C.green, fontSize: 12, fontWeight: "600" }}>
                   {CAMPAIGNS.length} live
                 </Text>
               </View>
@@ -229,7 +229,7 @@ export default function HomeScreen() {
             {totalEarnings > 0 && (
               <View style={{
                 marginHorizontal: 20, marginBottom: 20,
-                backgroundColor: C.card, borderRadius: 16,
+                backgroundColor: C.bg1, borderRadius: 16,
                 borderWidth: 1, borderColor: C.border,
                 padding: 16, ...C.shadow,
               }}>
@@ -244,10 +244,10 @@ export default function HomeScreen() {
                   </View>
                   <View style={{
                     width: 42, height: 42, borderRadius: 12,
-                    backgroundColor: C.greenBg, borderWidth: 1, borderColor: C.greenBorder,
+                    backgroundColor: "rgba(168,85,247,0.12)", borderWidth: 1, borderColor: "rgba(168,85,247,0.3)",
                     alignItems: "center", justifyContent: "center",
                   }}>
-                    <Ionicons name="trending-up" size={20} color={C.greenText} />
+                    <Ionicons name="trending-up" size={20} color={C.accent} />
                   </View>
                 </View>
                 <View style={{
@@ -256,7 +256,7 @@ export default function HomeScreen() {
                   borderWidth: 1, borderColor: C.border,
                 }}>
                   {[
-                    { label: "Approved", value: String(approvedCount), color: C.greenText },
+                    { label: "Approved", value: String(approvedCount), color: C.green },
                     { label: "Pending",  value: String(pendingCount),  color: C.amber },
                     { label: "Total",    value: String(submissions.length), color: C.text },
                   ].map((stat, i) => (
@@ -302,8 +302,8 @@ export default function HomeScreen() {
                       flexDirection: "row", alignItems: "center", gap: 5,
                       paddingHorizontal: 14, paddingVertical: 8,
                       borderRadius: 100, borderWidth: 1,
-                      backgroundColor: active ? C.text : C.card,
-                      borderColor: active ? C.text : C.border,
+                      backgroundColor: active ? C.accent : C.bg1,
+                      borderColor: active ? C.accent : C.border,
                       ...C.shadow,
                     }}
                   >
@@ -315,7 +315,7 @@ export default function HomeScreen() {
                     </Text>
                     {count > 0 && (
                       <View style={{
-                        backgroundColor: active ? "rgba(255,255,255,0.2)" : C.bgDeep,
+                        backgroundColor: active ? "rgba(255,255,255,0.2)" : C.bg3,
                         borderRadius: 100, paddingHorizontal: 6, paddingVertical: 1,
                       }}>
                         <Text style={{ fontSize: 11, fontWeight: "700", color: active ? "#fff" : C.textDim }}>
@@ -339,7 +339,7 @@ export default function HomeScreen() {
               <View style={{ paddingTop: 52, alignItems: "center", paddingHorizontal: 32 }}>
                 <View style={{
                   width: 60, height: 60, borderRadius: 30,
-                  backgroundColor: C.bgDeep, borderWidth: 1, borderColor: C.border,
+                  backgroundColor: C.bg2, borderWidth: 1, borderColor: C.border,
                   alignItems: "center", justifyContent: "center", marginBottom: 16,
                 }}>
                   <Ionicons name="layers-outline" size={26} color={C.textDim} />
@@ -356,7 +356,7 @@ export default function HomeScreen() {
                   <TouchableOpacity
                     onPress={() => switchSection("discover")}
                     style={{
-                      marginTop: 20, backgroundColor: C.green,
+                      marginTop: 20, backgroundColor: C.accent,
                       borderRadius: 100, paddingHorizontal: 24, paddingVertical: 12,
                     }}
                   >

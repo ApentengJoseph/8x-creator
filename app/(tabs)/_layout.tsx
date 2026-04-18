@@ -6,7 +6,7 @@ export default function TabLayout() {
       tabBar={() => null}
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: '#F7F7F5' },
+        contentStyle: { backgroundColor: '#000000' },
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home' }} />

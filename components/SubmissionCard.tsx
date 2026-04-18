@@ -8,7 +8,7 @@ import { formatPayout, formatTimeAgo } from "../utils/formatters";
 
 const STATUS = {
   pending: {
-    label: "Pending",
+    label: "Under Review",
     icon: "time-outline" as const,
     color: C.amber,
     bg: C.amberBg,
@@ -17,7 +17,7 @@ const STATUS = {
   approved: {
     label: "Approved",
     icon: "checkmark-circle" as const,
-    color: C.greenText,
+    color: C.green,
     bg: C.greenBg,
     border: C.greenBorder,
   },
@@ -37,7 +37,7 @@ export function SubmissionCard({ submission }: { submission: Submission }) {
 
   return (
     <View style={{
-      backgroundColor: C.card,
+      backgroundColor: C.bg1,
       borderRadius: 16,
       borderWidth: 1,
       borderColor: C.border,
@@ -50,7 +50,7 @@ export function SubmissionCard({ submission }: { submission: Submission }) {
       {/* Brand initial circle */}
       <View style={{
         width: 46, height: 46, borderRadius: 23,
-        backgroundColor: C.bgDeep,
+        backgroundColor: C.bg2,
         alignItems: "center", justifyContent: "center",
         flexShrink: 0,
         borderWidth: 1, borderColor: C.border,
@@ -66,14 +66,13 @@ export function SubmissionCard({ submission }: { submission: Submission }) {
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
           <Text style={{ color: C.textMid, fontSize: 13 }}>{submission.brandName}</Text>
           <Text style={{ color: C.textDim, fontSize: 13 }}>·</Text>
-          <Text style={{ color: C.greenText, fontSize: 13, fontWeight: "600" }}>
+          <Text style={{ color: C.accent, fontSize: 13, fontWeight: "600" }}>
             {formatPayout(submission.payout)}
           </Text>
           <Text style={{ color: C.textDim, fontSize: 13 }}>·</Text>
           <Text style={{ color: C.textDim, fontSize: 13 }}>{formatTimeAgo(submission.submittedAt)}</Text>
         </View>
 
-        {/* Feedback + resubmit for rejected */}
         {submission.status === "rejected" && submission.reviewFeedback && (
           <Text style={{ color: C.textMid, fontSize: 12, lineHeight: 17, fontStyle: "italic", marginTop: 2 }} numberOfLines={2}>
             "{submission.reviewFeedback}"
@@ -84,8 +83,8 @@ export function SubmissionCard({ submission }: { submission: Submission }) {
             onPress={() => router.push(`/submit/${submission.campaignId}`)}
             style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 4 }}
           >
-            <Ionicons name="refresh-outline" size={12} color={C.greenText} />
-            <Text style={{ color: C.greenText, fontSize: 12, fontWeight: "600" }}>Revise & resubmit</Text>
+            <Ionicons name="refresh-outline" size={12} color={C.accent} />
+            <Text style={{ color: C.accent, fontSize: 12, fontWeight: "600" }}>Revise & resubmit</Text>
           </TouchableOpacity>
         )}
       </View>

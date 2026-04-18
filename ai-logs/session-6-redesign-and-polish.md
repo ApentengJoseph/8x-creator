@@ -88,6 +88,28 @@ Context: Previous sessions produced a working app. Feedback from a reviewer said
 
 ---
 
+---
+
+**Me:** Fetch this design file and implement the relevant aspects of the design.
+
+**Claude:**
+- Decompressed the gzip tar bundle from the Anthropic design API; extracted `joe/project/Creator App.html` and `joe/chats/chat1.md`
+- Design called for a full dark-theme overhaul: black backgrounds (`#000`, `#111`, `#1a1a1a`, `#222`), violet/pink gradient accent (`#a855f7` → `#ec4899`), white text
+- `constants/colors.ts` — complete rewrite: dark bg0/bg1/bg2/bg3 palette, C.accent (violet), C.accentB (pink), gradient start/end tokens, all legacy green aliases preserved for status UI
+- `app/_layout.tsx` — `StatusBar` changed to `"light"`, root `contentStyle` to `#000000`
+- `app/(tabs)/_layout.tsx` — Tabs `contentStyle` updated to `#000000`
+- `components/CampaignCard.tsx` — dark card (`C.bg1`), 3px brand-color accent stripe at top, slots progress bar, tag pills, violet payout text (`C.accent`), arrow circle
+- `components/SubmissionCard.tsx` — dark surface, accent payout color
+- `components/SkeletonCard.tsx` — skeleton bones use `C.bg3` instead of old bgDeep
+- `components/UserAvatar.tsx` — ring color updated to `C.accent` (violet)
+- `app/(tabs)/index.tsx` — segmented control pill uses `C.bg3`, filter chips use `C.accent` as active color, earnings badge uses violet, live badge uses green
+- `app/(tabs)/submissions.tsx` — dark cards, accent filter chips, accent earnings badge
+- `app/(tabs)/profile.tsx` — stats `Earned` color → `C.accent`, menu item icon backgrounds use `C.bg2`, badge uses violet
+- `app/campaign/[id].tsx` — hero section replaced with brand-color tinted header gradient (`brandAvatarColor + 18` opacity), tab navigation added (Brief / Examples tabs with brand-color underline), sticky CTA uses `LinearGradient` violet→pink with glow shadow, back button styled as pill (matches design)
+- `app/submit/[campaignId].tsx` — platform toggle uses violet accent border/bg when active, `LinearGradient` submit button, success screen gradient circle instead of green, section label step numbers use violet ring, sticky CTA uses `LinearGradient` fade overlay
+
+---
+
 ## Notes to self
 
 - `Animated.parallel` with mixed `useNativeDriver` values is a hard error in RN — even on *different* `Animated.Value` instances within the same call. Keep all animations in a parallel on the same driver, or call `.start()` separately

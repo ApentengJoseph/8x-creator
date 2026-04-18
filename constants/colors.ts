@@ -2,61 +2,80 @@ import { ViewStyle } from 'react-native';
 
 export const C = {
   // ─── Backgrounds ───────────────────────────────────────────────
-  bg: '#F7F7F5',            // Linktree warm off-white page background
-  bgDeep: '#EDEDE9',        // slightly deeper — inputs, nested surfaces
-  card: '#FFFFFF',
-  cardElevated: '#FFFFFF',
+  bg: '#000000',            // page background
+  bg1: '#111111',           // card / surface
+  bg2: '#1a1a1a',           // nested surface
+  bg3: '#222222',           // deepest element (tags, icons bg)
+  // legacy aliases kept so existing code compiles
+  bgDeep: '#1a1a1a',
+  card: '#111111',
+  cardElevated: '#1a1a1a',
 
   // ─── Text ──────────────────────────────────────────────────────
-  text: '#1E2330',          // Linktree Squid Ink — near-black
-  textMid: '#737373',       // mid-grey secondary
-  textDim: '#AAAAAA',       // light grey tertiary
+  text: '#FFFFFF',
+  textMid: 'rgba(255,255,255,0.6)',
+  textDim: 'rgba(255,255,255,0.3)',
 
   // ─── Borders ───────────────────────────────────────────────────
-  border: 'rgba(0,0,0,0.07)',
-  borderMid: 'rgba(0,0,0,0.12)',
-  borderStrong: 'rgba(0,0,0,0.18)',
+  border: 'rgba(255,255,255,0.08)',
+  borderMid: 'rgba(255,255,255,0.12)',
+  borderStrong: 'rgba(255,255,255,0.18)',
 
-  // ─── Green — Linktree Pastel Green #42E661 ────────────────────
-  green: '#42E661',         // button fills, active states
-  greenDark: '#1A7A2C',
-  greenBg: 'rgba(66,230,97,0.09)',
-  greenBgMid: 'rgba(66,230,97,0.15)',
-  greenBorder: 'rgba(66,230,97,0.40)',
-  greenText: '#1A7A2C',     // dark green text on white — AA accessible
+  // ─── Accent — violet / pink gradient ──────────────────────────
+  accent: '#a855f7',        // violet
+  accentB: '#ec4899',       // pink
+  accentGradStart: '#a855f7',
+  accentGradEnd: '#ec4899',
+
+  // ─── Legacy green aliases (submit / requirements UI) ──────────
+  green: '#22c55e',
+  greenDark: '#16a34a',
+  greenBg: 'rgba(34,197,94,0.10)',
+  greenBgMid: 'rgba(34,197,94,0.15)',
+  greenBorder: 'rgba(34,197,94,0.30)',
+  greenText: '#22c55e',
 
   // ─── Status — amber ────────────────────────────────────────────
-  amber: '#FF9500',
-  amberBg: 'rgba(255,149,0,0.08)',
-  amberBorder: 'rgba(255,149,0,0.28)',
+  amber: '#f59e0b',
+  amberBg: 'rgba(245,158,11,0.12)',
+  amberBorder: 'rgba(245,158,11,0.30)',
 
   // ─── Status — red ──────────────────────────────────────────────
-  red: '#FF3B30',
-  redBg: 'rgba(255,59,48,0.06)',
-  redBorder: 'rgba(255,59,48,0.22)',
+  red: '#ef4444',
+  redBg: 'rgba(239,68,68,0.10)',
+  redBorder: 'rgba(239,68,68,0.25)',
 
-  // ─── Shadows (minimal — Linktree style) ────────────────────────
+  // ─── Shadows ───────────────────────────────────────────────────
   shadow: {
-    shadowColor: '#1E2330',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 3,
   } as ViewStyle,
 
   shadowMd: {
-    shadowColor: '#1E2330',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 14,
-    elevation: 4,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+    elevation: 6,
   } as ViewStyle,
 
   shadowLg: {
-    shadowColor: '#1E2330',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.6,
+    shadowRadius: 24,
+    elevation: 10,
+  } as ViewStyle,
+
+  // ─── Accent glow shadow ────────────────────────────────────────
+  shadowAccent: {
+    shadowColor: '#a855f7',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.10,
-    shadowRadius: 22,
-    elevation: 6,
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 8,
   } as ViewStyle,
 };
