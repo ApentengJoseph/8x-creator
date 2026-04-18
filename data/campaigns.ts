@@ -44,6 +44,8 @@ export const CAMPAIGNS: Campaign[] = [
     spotsTotal: 50,
     spotsLeft: 8,
     acceptedCount: 42,
+    logoUrl: "https://img.logo.dev/gymshark.com?token=pk_OEQbQzSKQD--0aNJ8LXjLQ&retina=true",
+    bannerImageUrl: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=400&fit=crop&q=80",
   },
   {
     id: "camp-002",
@@ -72,6 +74,8 @@ export const CAMPAIGNS: Campaign[] = [
     spotsTotal: 80,
     spotsLeft: 31,
     acceptedCount: 24,
+    logoUrl: "https://img.logo.dev/celsius.com?token=pk_OEQbQzSKQD--0aNJ8LXjLQ&retina=true",
+    bannerImageUrl: "https://images.unsplash.com/photo-1594882645126-14ac19a0ab2a?w=800&h=400&fit=crop&q=80",
   },
   {
     id: "camp-003",
@@ -100,6 +104,8 @@ export const CAMPAIGNS: Campaign[] = [
     spotsTotal: 30,
     spotsLeft: 14,
     acceptedCount: 16,
+    logoUrl: "https://img.logo.dev/ouraring.com?token=pk_OEQbQzSKQD--0aNJ8LXjLQ&retina=true",
+    bannerImageUrl: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=400&fit=crop&q=80",
   },
   {
     id: "camp-004",
@@ -128,6 +134,8 @@ export const CAMPAIGNS: Campaign[] = [
     spotsTotal: 40,
     spotsLeft: 22,
     acceptedCount: 18,
+    logoUrl: "https://img.logo.dev/aloyoga.com?token=pk_OEQbQzSKQD--0aNJ8LXjLQ&retina=true",
+    bannerImageUrl: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=800&h=400&fit=crop&q=80",
   },
   {
     id: "camp-005",
@@ -156,6 +164,8 @@ export const CAMPAIGNS: Campaign[] = [
     spotsTotal: 60,
     spotsLeft: 6,
     acceptedCount: 38,
+    logoUrl: "https://img.logo.dev/forhims.com?token=pk_OEQbQzSKQD--0aNJ8LXjLQ&retina=true",
+    bannerImageUrl: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=400&fit=crop&q=80",
   },
   {
     id: "camp-006",
@@ -184,5 +194,7 @@ export const CAMPAIGNS: Campaign[] = [
     spotsTotal: 35,
     spotsLeft: 20,
     acceptedCount: 15,
+    logoUrl: "https://img.logo.dev/drinkag1.com?token=pk_OEQbQzSKQD--0aNJ8LXjLQ&retina=true",
+    bannerImageUrl: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&q=80",
   },
 ];

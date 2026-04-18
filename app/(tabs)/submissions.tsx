@@ -93,29 +93,29 @@ export default function SubmissionsScreen() {
                 flexDirection: 'row', alignItems: 'center', gap: 6,
                 paddingHorizontal: 13, paddingVertical: 8,
                 borderRadius: 20, borderWidth: 1.5,
-                backgroundColor: active ? cfg.bg : C.card,
-                borderColor: active ? cfg.border : C.border,
+                backgroundColor: active ? C.text : C.card,
+                borderColor: active ? C.text : C.border,
                 ...C.shadow,
               }}
             >
               <Ionicons
                 name={f.icon}
                 size={13}
-                color={active ? cfg.color : C.textDim}
+                color={active ? "#fff" : C.textDim}
               />
               <Text style={{
-                color: active ? cfg.color : C.textMid,
+                color: active ? "#fff" : C.textMid,
                 fontSize: 13, fontWeight: active ? '700' : '500',
               }}>
                 {f.label}
               </Text>
               {count > 0 && (
                 <View style={{
-                  backgroundColor: active ? cfg.border : C.bgDeep,
-                  borderRadius: 10, paddingHorizontal: 6, paddingVertical: 1,
+                  backgroundColor: active ? "rgba(255,255,255,0.2)" : C.bgDeep,
+                  borderRadius: 100, paddingHorizontal: 6, paddingVertical: 1,
                 }}>
                   <Text style={{
-                    color: active ? cfg.color : C.textDim,
+                    color: active ? "#fff" : C.textDim,
                     fontSize: 11, fontWeight: '700',
                   }}>
                     {count}

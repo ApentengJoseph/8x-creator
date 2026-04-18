@@ -26,6 +26,8 @@ export interface Campaign {
   spotsTotal: number;
   spotsLeft: number;
   acceptedCount: number;
+  logoUrl?: string;
+  bannerImageUrl?: string;
 }
 
 export interface Submission {

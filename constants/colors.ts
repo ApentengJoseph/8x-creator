@@ -2,60 +2,61 @@ import { ViewStyle } from 'react-native';
 
 export const C = {
   // ─── Backgrounds ───────────────────────────────────────────────
-  bg: '#f4f3f1',          // warm off-white
-  bgDeep: '#eceae6',      // slightly deeper for nested surfaces
-  card: '#ffffff',         // pure white card
+  bg: '#F7F7F5',            // Linktree warm off-white page background
+  bgDeep: '#EDEDE9',        // slightly deeper — inputs, nested surfaces
+  card: '#FFFFFF',
+  cardElevated: '#FFFFFF',
 
   // ─── Text ──────────────────────────────────────────────────────
-  text: '#18181b',         // near-black primary
-  textMid: '#71717a',      // zinc-500 secondary
-  textDim: '#a1a1aa',      // zinc-400 tertiary
+  text: '#1E2330',          // Linktree Squid Ink — near-black
+  textMid: '#737373',       // mid-grey secondary
+  textDim: '#AAAAAA',       // light grey tertiary
 
   // ─── Borders ───────────────────────────────────────────────────
-  border: 'rgba(0,0,0,0.06)',
-  borderMid: 'rgba(0,0,0,0.10)',
-  borderStrong: 'rgba(0,0,0,0.15)',
+  border: 'rgba(0,0,0,0.07)',
+  borderMid: 'rgba(0,0,0,0.12)',
+  borderStrong: 'rgba(0,0,0,0.18)',
 
-  // ─── Green accent ──────────────────────────────────────────────
-  green: '#16a34a',
-  greenDark: '#166534',
-  greenBg: 'rgba(22,163,74,0.08)',
-  greenBgMid: 'rgba(22,163,74,0.12)',
-  greenBorder: 'rgba(22,163,74,0.22)',
-  greenText: '#15803d',
+  // ─── Green — Linktree Pastel Green #42E661 ────────────────────
+  green: '#42E661',         // button fills, active states
+  greenDark: '#1A7A2C',
+  greenBg: 'rgba(66,230,97,0.09)',
+  greenBgMid: 'rgba(66,230,97,0.15)',
+  greenBorder: 'rgba(66,230,97,0.40)',
+  greenText: '#1A7A2C',     // dark green text on white — AA accessible
 
   // ─── Status — amber ────────────────────────────────────────────
-  amber: '#d97706',
-  amberBg: 'rgba(217,119,6,0.08)',
-  amberBorder: 'rgba(217,119,6,0.2)',
+  amber: '#FF9500',
+  amberBg: 'rgba(255,149,0,0.08)',
+  amberBorder: 'rgba(255,149,0,0.28)',
 
   // ─── Status — red ──────────────────────────────────────────────
-  red: '#dc2626',
-  redBg: 'rgba(220,38,38,0.06)',
-  redBorder: 'rgba(220,38,38,0.18)',
+  red: '#FF3B30',
+  redBg: 'rgba(255,59,48,0.06)',
+  redBorder: 'rgba(255,59,48,0.22)',
 
-  // ─── Shadows ───────────────────────────────────────────────────
+  // ─── Shadows (minimal — Linktree style) ────────────────────────
   shadow: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowColor: '#1E2330',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   } as ViewStyle,
 
   shadowMd: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.10,
-    shadowRadius: 18,
-    elevation: 6,
+    shadowColor: '#1E2330',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 4,
   } as ViewStyle,
 
   shadowLg: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.14,
-    shadowRadius: 28,
-    elevation: 10,
+    shadowColor: '#1E2330',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 22,
+    elevation: 6,
   } as ViewStyle,
 };
